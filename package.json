@@ -1,0 +1,19 @@
+{
+  "name": "delilahrestoapi-localsql",
+  "version": "1.0.0",
+  "description": "This API handles restaurant orders, you can signup to place orders and save your favourite products. Administrators can post, update or delete meals, and change the order status.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shift-developer/DelilahRestoApi-localSQL.git"
+  },
+  "author": "shift-developer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shift-developer/DelilahRestoApi-localSQL/issues"
+  },
+  "homepage": "https://github.com/shift-developer/DelilahRestoApi-localSQL#readme"
+}
