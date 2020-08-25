@@ -1,0 +1,1364 @@
+openapi: 3.0.0
+# Added by API Auto Mocking Plugin
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/shift-developer/DelilahRestoApi/1.0.0
+  - description: Local Server
+    url: https://localhost:3000
+info:
+  description: Delilah Resto is Acamica´s third project. This API handles restaurant orders, you can signup to place orders and save your favourite products. Administrators can post, update or delete meals, and change the order status.
+  version: "1.0.0"
+  title: Delilah Restó API
+  contact:
+    email: juanshift.dev@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: "Users"
+    description: "Request for Users"
+  - name: "Products"
+    description: "Request for Products"
+  - name: "Orders"
+    description: "Request for Orders"
+paths:
+  /users/register:
+    post:
+      tags:
+        - Users
+      summary: Add a new user
+      description: Add a new user to the database
+      operationId: addUser
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserBodypost"
+
+      responses:
+        "201":
+          description: User created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: User successfully created
+        "409":
+          description: Invalid email
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: Email is already used
+        "422":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: The body request have semantic errors
+  /users/login:
+    post:
+      tags:
+        - "Users"
+      summary: Log in an existing user (GET token)
+      description: Login user and get the token
+      operationId: loginUser
+
+      requestBody:
+        required: true
+        description: username and password to login
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userName:
+                  type: string
+                  example: ayuwoki_michael
+                password:
+                  type: string
+                  example: thriller123
+
+      responses:
+        "200":
+          description: Logged in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  userName:
+                    type: string
+                    example: ayuwoki_michael
+                  accesstoken:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1jshhsInR5cCI6IkpXVCJ9.eyJpZCI6MTAwLCJpc0FkbWluIjoxLCJpYXQiOjE1OT00TY4NTIsImV4cCI6MTU5NjU1NTg1Mn0.o9r6q2IXlOmzJVhTNoAasdsmyhfLFnp2ckw7GVxAuLA"
+        "401":
+          description: Incorrect data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: incorrect user-password
+
+  /users:
+    get:
+      tags:
+        - "Users"
+      summary: Get all users (Admin exclusive)
+      description: Get a list with all users
+      operationId: GetallUser
+
+      parameters:
+        - name: access-token
+          in: header
+          description: Admin token
+          schema:
+            $ref: "#/components/schemas/AuthorizationHeaders"
+          required: true
+
+      responses:
+        "200":
+          description: Array with all users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+
+        "401":
+          description: "Validation exception - Ivalid token - No token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorToken'
+
+  /users/{id}:
+    get:
+      tags:
+        - "Users"
+      summary: Get user by id
+      description: Normal users can only access to their id, admins have global access.
+      operationId: GetUserbyID
+
+      parameters:
+        - name: id
+          in: path
+
+          required: true
+          schema:
+            type: integer
+
+        - name: access-token
+          in: header
+          description: user token
+          schema:
+            $ref: "#/components/schemas/AuthorizationHeaders"
+          required: true
+
+      responses:
+        "200":
+          description: User object
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+
+        "401":
+          description: "Validation exception - Ivalid token - No token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorToken'
+        "422":
+          description: Invalid id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: Incorrect ID
+    put:
+      tags:
+        - "Users"
+      summary: Edit user by id
+      description: Normal users can only access to their id, admins have global access.
+      operationId: EditUserbyID
+
+      parameters:
+        - name: id
+          in: path
+
+          required: true
+          schema:
+            type: integer
+        - name: access-token
+          in: header
+          description: user token
+          schema:
+            $ref: "#/components/schemas/AuthorizationHeaders"
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserBodypost"
+      responses:
+        "200":
+          description: User updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: User successfully updated
+        "401":
+          description: "Validation exception - Invalid token - No token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorToken'
+        "404":
+          description: "ID not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorId'
+        "409":
+          description: Invalid email
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: Email is already used
+        "422":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: The body request have semantic errors
+    delete:
+      tags:
+        - "Users"
+      summary: Delete user by id (Admin exclusive)
+      description: Delete user by id 
+      operationId: DeleteUserbyID
+
+      parameters:
+        - name: id
+          in: path
+
+          required: true
+          schema:
+            type: integer
+        - name: access-token
+          in: header
+          description: admin token
+          schema:
+            $ref: "#/components/schemas/AuthorizationHeaders"
+          required: true
+      responses:
+        "204":
+          description: Product deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeletedUser"
+        "401":
+          description: "Validation exception - Invalid token - No token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorToken'
+        "404":
+          description: "ID not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorId'
+        "409":
+          description: Invalid email
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: Email is already used
+        "422":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: The body request have semantic errors
+  /users/{id}/favs:
+    post:
+      tags:
+        - "Users"
+      summary: Post user's favourite product by user id
+      description: Normal users can only access to their id.
+      operationId: PostUserFavs
+
+      parameters:
+        - name: id
+          in: path
+
+          required: true
+          schema:
+            type: integer
+
+        - name: access-token
+          in: header
+          description: user token
+          schema:
+            $ref: "#/components/schemas/AuthorizationHeaders"
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserFavouriteProductPost"
+      responses:
+        "200":
+          description: User's favourite product added
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Favourite product added successfully 
+
+        "401":
+          description: "Validation exception - Ivalid token - No token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorToken'
+        "422":
+          description: Invalid id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: Incorrect ID
+  
+    get:
+      tags:
+        - "Users"
+      summary: Get user's favourite products by user id
+      description: Normal users can only access to their id, admins have global access.
+      operationId: GetUserFavs
+
+      parameters:
+        - name: id
+          in: path
+
+          required: true
+          schema:
+            type: integer
+
+        - name: access-token
+          in: header
+          description: user token
+          schema:
+            $ref: "#/components/schemas/AuthorizationHeaders"
+          required: true
+
+      responses:
+        "200":
+          description: Array of User favourites products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+
+        "401":
+          description: "Validation exception - Ivalid token - No token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorToken'
+        "422":
+          description: Invalid id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: Incorrect ID
+  
+  /users/{id}/favs/{idProduct}:
+    delete:
+      tags:
+        - "Users"
+      summary: Delete user's favourite product by user id and product id
+      description: Normal users can only access to their id.
+      operationId: DeleteUserFav
+
+      parameters:
+        - name: id
+          in: path
+
+          required: true
+          schema:
+            type: integer
+            
+        - name: idProduct
+          in: path
+
+          required: true
+          schema:
+            type: integer
+
+        - name: access-token
+          in: header
+          description: user token
+          schema:
+            $ref: "#/components/schemas/AuthorizationHeaders"
+          required: true
+      responses:
+        "204":
+          description: Favourite Product deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Favourite product deleted
+        "401":
+          description: "Validation exception - Invalid token - No token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorToken'
+        "404":
+          description: "ID not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorId'
+    
+  /product:
+    post:
+      tags:
+        - "Products"
+      summary: Add product (Admin exclusive)
+      description: Create a new product
+      parameters:
+        - name: access-token
+          in: header
+          description: Admin token
+          schema:
+            $ref: "#/components/schemas/AuthorizationHeaders"
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductBodyPost"
+
+      responses:
+        "200":
+          description: Product created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Product created
+                  product:
+                    $ref: "#/components/schemas/ProductBodyPost"
+
+        "422":
+          description: Name is used
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: Name is used
+        "401":
+          description: "Validation exception - Invalid token - No token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorToken'
+
+    get:
+      tags:
+        - "Products"
+      summary: List products
+      description: List all available products
+      parameters:
+        - name: access-token
+          in: header
+          description: User token
+          schema:
+            $ref: "#/components/schemas/AuthorizationHeaders"
+          required: true
+
+      responses:
+        "200":
+          description: Array with all products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "401":
+          description: "Validation exception - Invalid token - No token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorToken'
+
+    
+    
+
+  /product/{id}:
+    get:
+      tags:
+        - "Products"
+      summary: Get product by id
+      description: Get product by id
+      
+      parameters:
+        - name: id
+          in: path
+          description: The id of the product you want to get
+          schema:
+            type: integer
+          required: true
+        - name: access-token
+          in: header
+          description: Admin token
+          schema:
+            $ref: "#/components/schemas/AuthorizationHeaders"
+          required: true
+      responses:
+        "200":
+          description: Product edited
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+
+        "404":
+          description: Invalid id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/errorId"
+        "401":
+          description: "Validation exception - Invalid token - No token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorToken'  
+      
+    put:
+      tags:
+        - "Products"
+      summary: Edit product (Admin exclusive)
+      description: Edit an existing product
+
+      parameters:
+        - name: id
+          in: path
+          description: The id of the product you want to edit
+          schema:
+            type: integer
+          required: true
+        - name: access-token
+          in: header
+          description: Admin token
+          schema:
+            $ref: "#/components/schemas/AuthorizationHeaders"
+          required: true
+
+      requestBody:
+        required: true
+        description: Product properties
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditProduct"
+
+      responses:
+        "200":
+          description: Product edited
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EditedProduct"
+
+        "404":
+          description: Invalid id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/errorId"
+        "401":
+          description: "Validation exception - Invalid token - No token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorToken'
+  
+    delete:
+      tags:
+        - "Products"
+      summary: Delete product (Admin exclusive)
+      description: Delete an existing product
+      parameters:
+        - name: id
+          in: path
+          description: The id of the product you want to delete
+          schema:
+            type: integer
+          required: true
+
+        - name: access-token
+          in: header
+          description: Admin token
+          schema:
+            $ref: "#/components/schemas/AuthorizationHeaders"
+          required: true
+
+      responses:
+        "204":
+          description: Product deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeletedProduct"
+
+        "404":
+          description: Invalid id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/errorId"
+        "401":
+          description: "Validation exception - Invalid token - No token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorToken'
+
+  /order:
+    post:
+      tags:
+        - "Orders"
+      summary: Create a new order
+      description: Allows an user to create a new order
+
+      parameters:
+        - name: access-token
+          in: header
+          description: User token
+          schema:
+            $ref: "#/components/schemas/AuthorizationHeaders"
+          required: true
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderBodyPost"
+
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+        "401":
+          description: "Validation exception - Ivalid token - No token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorToken'
+        "422":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: The body request have semantic errors
+    
+    get:
+      tags:
+        - "Orders"
+      summary: Get all orders (Admin exclusive)
+      description: Get a list with all orders
+      parameters:
+        - name: access-token
+          in: header
+          description: Admin token
+          schema:
+            $ref: "#/components/schemas/AuthorizationHeaders"
+          required: true
+
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+
+        "401":
+          description: "Validation exception - Invalid token - No token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorToken'
+
+    
+
+  /order/{id}:
+    get:
+        tags:
+          - "Orders"
+        summary: Get an order by id 
+        description: Get specific order. Normal users can only access to their id, admins have global access.
+  
+        parameters:
+          - name: id
+            in: path
+            description: The id of the order you want
+            schema:
+              type: integer
+            required: true
+          - name: access-token
+            in: header
+            description: Admin token
+            schema:
+              $ref: "#/components/schemas/AuthorizationHeaders"
+            required: true
+  
+        responses:
+          "200":
+            description: OK
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Order"
+  
+          "401":
+            description: "Validation exception - Invalid token - No token"
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/errorToken'
+          "422":
+            description: Invalid id
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    success:
+                      type: boolean
+                      example: false
+                    error:
+                      type: string
+                      example: Incorrect ID
+    put:
+        tags:
+          - "Orders"
+        summary: Edit an order status by id (Admin exclusive)
+        description: Allows the admin to edit an order
+  
+        parameters:
+          - name: id
+            in: path
+            description: The id of the order you want to edit
+            schema:
+              type: integer
+            required: true
+          - name: access-token
+            in: header
+            description: Admin token
+            schema:
+              $ref: "#/components/schemas/AuthorizationHeaders"
+            required: true
+  
+        requestBody:
+          required: true
+          description: Order new status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EditOrder"
+  
+        responses:
+          "200":
+            description: OK
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/EditedOrder"
+  
+          "401":
+            description: "Validation exception - Invalid token - No token"
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/errorToken'
+          "422":
+            description: Invalid id
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    success:
+                      type: boolean
+                      example: false
+                    error:
+                      type: string
+                      example: Incorrect ID
+    delete:
+      tags:
+        - "Orders"
+      summary: Delete Order (Admin exclusive)
+      description: Delete an existing order
+      parameters:
+        - name: id
+          in: path
+          description: The id of the order you want to delete
+          schema:
+            type: integer
+          required: true
+        - name: access-token
+          in: header
+          description: Admin token
+          schema:
+            $ref: "#/components/schemas/AuthorizationHeaders"
+          required: true
+      responses:
+        "200":
+          description: Order deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeletedOrder"
+
+        "422":
+          description: Invalid id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: Incorrect ID
+
+components:
+  schemas:
+    #ERRORS
+    errorToken:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: "Invalid token or no token"
+    errorId:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: "Id not found"
+    #HEADERS
+    AuthorizationHeaders:
+      type: "object"
+      properties:
+        Authorization:
+          type: "string"
+          example: Bearer eyJhbGciOiJIUzI1jshhsInR5cCI6IkpXVCJ9.eyJpZCI6MTAwLCJpc0FkbWluIjoxLCJpYXQiOjE1OT00TY4NTIsImV4cCI6MTU5NjU1NTg1Mn0.o9r6q2IXlOmzJVhTNoAasdsmyhfLFnp2ckw7GVxAuLA
+          
+    #BODYs
+    UserBodypost:
+      type: "object"
+      properties:
+        userName:
+          type: "string"
+          example: ayuwoki_michael
+        password:
+          type: "string"
+          example: thriller123
+        fullName:
+          type: "string"
+          example: Michael Jackson
+        email:
+          type: "string"
+          example: kingofpop@michaeljackson.com
+        phoneNumber:
+          type: "string"
+          example: 12123244152
+        address:
+          type: "string"
+          example: Neverland Ranch, Santa Barbara California
+
+    User:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+          example: 1
+        userName:
+          type: "string"
+          example: ayuwoki_michael
+        password:
+          type: "string"
+          example: thriller123
+        fullName:
+          type: "string"
+          example: Michael Jackson
+        email:
+          type: "string"
+          example: kingofpop@michaeljackson.com
+        phoneNumber:
+          type: "string"
+          example: 12123244152
+        address:
+          type: "string"
+          example: Neverland Ranch, Santa Barbara California
+        isAdmin:
+          type: "boolean"
+          example: false
+    DeletedUser:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: User deleted
+        deletedUser:
+          type: object
+          properties:
+            id:
+              type: "integer"
+              format: "int64"
+              example: 1
+            userName:
+              type: "string"
+              example: ayuwoki_michael
+            password:
+              type: "string"
+              example: thriller123
+            fullName:
+              type: "string"
+              example: Michael Jackson
+            email:
+              type: "string"
+              example: kingofpop@michaeljackson.com
+            phoneNumber:
+              type: "string"
+              example: 12123244152
+            address:
+              type: "string"
+              example: Neverland Ranch, Santa Barbara California
+    UserFavouriteProductPost:
+      type: "object"
+      properties:
+        id_Product: 
+          type: "integer"
+          format: "int64"
+          example: 3
+        id_User:
+          type: "integer"
+          format: "int64"
+          example: 1
+
+    Product:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+          example: 1
+        name:
+          type: string
+          example: Hamburguesa clásica
+        price:
+          type: "integer"
+          format: "int64"
+          example: 300
+        description:
+          type: "string"
+          example: Hamburguesa con queso y papas fritas
+        url_image:
+          type: "string"
+          example: www.imagenhost.com/1232424
+        code:
+          type: "string"
+          example: HamClas
+
+    ProductBodyPost:
+      type: "object"
+      properties:
+        name:
+          type: string
+          example: Hamburguesa Doble
+        price:
+          type: "number"
+          example: 350
+        description:
+          type: "string"
+          example: Hamburguesa Doble queso
+        url_image:
+          type: "string"
+          example: www.imagenhost.com/1232424
+        code:
+          type: "string"
+          example: HamDob
+        
+    EditProduct:
+      type: "object"
+      properties:
+        name:
+          type: string
+          example: Hamburguesa con queso
+        price:
+          type: "integer"
+          format: "int64"
+          example: 200
+        description:
+          type: "string"
+          example: Hamburguesa con queso
+        url_image:
+          type: "string"
+          example: www.imagenhost.com/1232424
+        code:
+          type: "string"
+          example: HamQue
+
+    EditedProduct:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Product updated
+        editedProduct:
+          type: "object"
+          properties:
+            id:
+              type: "integer"
+              format: "int64"
+              example: 1
+            name:
+              type: string
+              example: Hamburguesa con queso
+            price:
+              type: "integer"
+              format: "int64"
+              example: 200
+            description:
+              type: "string"
+              example: Hamburguesa con queso
+            url_image:
+              type: "string"
+              example: www.imagenhost.com/1232424
+            code:
+              type: "string"
+              example: HamQue
+
+    DeletedProduct:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Product deleted
+        deletedOrder:
+          type: object
+          properties:
+            id:
+              type: "integer"
+              format: "int64"
+              example: 4
+            name:
+              type: string
+              example: Ensalada rusa
+            price:
+              type: "integer"
+              format: "int64"
+              example: 150
+            description:
+              type: "string"
+              example: Ensalada rusa
+            url_image:
+              type: "string"
+              example: www.imagenhost.com/1232
+            code:
+              type: "string"
+              example: EnsRus
+
+
+    Order:
+      type: object
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+          example: 5
+        id_user:
+          type: "integer"
+          format: "int64"
+          example: 43
+        payment_method:
+          type: "string"
+          example: efectivo
+        status:
+          type: "string"
+          example: new
+        date:
+          type: "string"
+          description: date
+          example: "14/08/2020"
+        time:
+          type: "string"
+          description: time
+          example: "22:54:06"
+        description:
+          type: "string"
+          example: "2xHamQue"
+        address:
+          type: "string"
+          example: "Av 9 de julio 3312, CABA"
+        total_price:
+          type: integer
+          example: 600
+
+    OrderBodyPost:
+      type: "object"
+      properties:
+        products:
+          type: "array"
+          items:
+            type: object
+            properties:
+              id_product:
+                type: "integer"
+                example: 3
+              quantity:
+                type: "integer"
+                example: 2
+        id_payment:
+          type: integer
+          example: 1
+        address:
+          type: string
+          example: "Av 9 de julio 3312, CABA"
+
+    EditOrder:
+      type: object
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+          example: 5
+        state:
+          type: string
+          example: cooking
+    EditedOrder:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Order updated
+        editedOrder:
+          type: object
+          properties:
+            id:
+              type: "integer"
+              format: "int64"
+              example: 5
+            id_user:
+              type: "integer"
+              format: "int64"
+              example: 43
+            payment_method:
+              type: "string"
+              example: efectivo
+            status:
+              type: "string"
+              example: cooking
+            date:
+              type: "string"
+              description: date
+              example: "14/08/2020"
+            time:
+              type: "string"
+              description: time
+              example: "22:54:06"
+            description:
+              type: "string"
+              example: "2xHamQue"
+            address:
+              type: "string"
+              example: "Av 9 de julio 3312, CABA"
+            total_price:
+              type: integer
+              example: 600
+
+    DeletedOrder:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Order deleted
+        deletedOrder:
+          type: object
+          properties:
+            id:
+              type: "integer"
+              format: "int64"
+              example: 5
+            id_user:
+              type: "integer"
+              format: "int64"
+              example: 43
