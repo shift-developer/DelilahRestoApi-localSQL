@@ -5,9 +5,6 @@ const dbOptions = {
     dialect: 'mysql',
 }
 
-const signature = 'H3sOYaM';
-
 module.exports = {
-    dbOptions,
-    signature
+    dbOptions
 }

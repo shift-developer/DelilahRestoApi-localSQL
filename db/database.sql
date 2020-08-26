@@ -23,11 +23,11 @@ INSERT INTO `Users` (`full_name`, `email`, `telephone`, `username`, `password`, 
 
 INSERT INTO `Users` (`full_name`, `email`, `telephone`, `username`, `password`, `address`) VALUES 
 ("Juan Cruz Gonzalez", "juancruzgon@gmail.com", "3516458574", "juanshift", "mas12563", "Croacia 2345"),
-("Jhon F Kenedy", "kenedy@gmail.com", "1552365677", "kenedy", "sniper965", "North Stratford 21"),
+("Jhon F Kenedy", "kenedy@gmail.com", "1552365677", "kenedy", "kennedy965", "North Stratford 21"),
 ("Michael Jackson", "kingofpop@gmail.com", "15656232455", "ayuwoki_michael", "moonwalk185", "Neverland Ranch 123"),
 ("Freddie Mercury", "heehee@gmail.com", "2565565645", "heehee_freddie", "heehee12", "Bohemian Rhapsody 45"),
 ("Ricardo Fort", "elcomandante@gmail.com", "1165568845", "el_comandante", "rollsroyce99", "Cutucuchillo 4526"),
-("Thomas Anderson", "thechosenone@gmail.com", "1176584665", "neo_matrix", "wakeup000", "Matrix 1"),
+("Thomas Anderson", "thechosenone@gmail.com", "1176584665", "neo_matrix", "wakeup01011", "Matrix 1"),
 ("Robert Downey Jr", "ironman@gmail.com", "1174545465", "iron_man", "iamironman01", "Avengers HQ 84"),
 ("Elon Musk", "realironman@gmail.com", "1178896845", "elon_musk", "wakeuponmars1", "Tesla 1232"),
 ("Dafne Suarez", "dafilinda@gmail.com", "3516894523", "dafitop", "jeje1234", "Glam 77"),
