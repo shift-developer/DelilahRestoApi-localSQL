@@ -7,7 +7,7 @@ USE `delilah_resto_localdb`;
 
 DROP TABLE IF EXISTS `Users`;
 CREATE TABLE `Users` (
-	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`id_user` INT(11) NOT NULL AUTO_INCREMENT,
 	`full_name` VARCHAR(50) NOT NULL,
 	`email` VARCHAR(70) NOT NULL,
 	`telephone` VARCHAR(50) NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE `Users` (
 	`password` VARCHAR(150) NOT NULL,
 	`address` VARCHAR(150) NOT NULL,
 	`admin` INT(1) NULL DEFAULT 0,
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id_user`)
 );
 
 INSERT INTO `Users` (`full_name`, `email`, `telephone`, `username`, `password`, `address`, `admin`) VALUES
@@ -36,13 +36,13 @@ INSERT INTO `Users` (`full_name`, `email`, `telephone`, `username`, `password`, 
 
 DROP TABLE IF EXISTS `Products`;
 CREATE TABLE `Products` (
-	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`id_product` INT(11) NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(80) NOT NULL,
 	`price` VARCHAR(30) NOT NULL,
 	`url_image` VARCHAR(250) NOT NULL,
 	`code` VARCHAR(30) NOT NULL,
 	`description` VARCHAR(300) NOT NULL,
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id_product`)
 );
 
 INSERT INTO `Products` (`name`, `price`, `url_image`, `code`, `description`) VALUES 
@@ -57,7 +57,7 @@ INSERT INTO `Products` (`name`, `price`, `url_image`, `code`, `description`) VAL
 
 DROP TABLE IF EXISTS `Orders`;
 CREATE TABLE `Orders` (
-	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`id_order` INT(11) NOT NULL AUTO_INCREMENT,
 	`id_user` INT(11) NOT NULL,
 	`total_price` VARCHAR(50) NOT NULL,
 	`id_payment` INT(2) NOT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE `Orders` (
 	`description` VARCHAR(300) NOT NULL,
 	`address` VARCHAR(150) NOT NULL,
 	`id_status` INT(2) NOT NULL,
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id_order`)
 );
 
 INSERT INTO `Orders` (`id_user`, `total_price`, `id_payment`, `date`, `description`, `address`, `id_status`) VALUES
@@ -79,15 +79,15 @@ INSERT INTO `Orders` (`id_user`, `total_price`, `id_payment`, `date`, `descripti
 (9, "800", 2, "2020/08/14 14:29:54", "2xMonFri", "Tesla 1232", 2),
 (10, "2000", 2, "2020/08/14 14:31:49", "4xGolHam", "Glam 77", 1);
 
-DROP TABLE IF EXISTS `Status`;
-CREATE TABLE `Status` (
-	`id` INT(11) NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `StatusCode`;
+CREATE TABLE `StatusCode` (
+	`id_status` INT(11) NOT NULL AUTO_INCREMENT,
 	`status` VARCHAR(50) NOT NULL,
 	`description` VARCHAR(300) NOT NULL,
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id_status`)
 );
 
-INSERT INTO `Status` (`status`, `description`) VALUES 
+INSERT INTO `StatusCode` (`status`, `description`) VALUES 
 ("new", "The order was posted correctly"),
 ("confirmed", "The order was approved successfully"),
 ("cooking", "The chef is preparing the order"),
@@ -97,9 +97,9 @@ INSERT INTO `Status` (`status`, `description`) VALUES
 
 DROP TABLE IF EXISTS `Payment`;
 CREATE TABLE `Payment` (
-	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`id_payment` INT(11) NOT NULL AUTO_INCREMENT,
 	`payment_method` VARCHAR(30) NOT NULL,
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id_payment`)
 );
 
 INSERT INTO `Payment` (`payment_method`) VALUES 
@@ -135,10 +135,10 @@ INSERT INTO `Products_Orders` (`id_order`, `id_product`, `quantity`) VALUES
 
 DROP TABLE IF EXISTS `Products_Favorites`;
 CREATE TABLE `Products_Favorites` (
-	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`id_favorite` INT(11) NOT NULL AUTO_INCREMENT,
 	`id_user` INT(11) NOT NULL,
 	`id_product` INT(11) NOT NULL,
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id_favorite`)
 );
 
 INSERT INTO `Products_Favorites` (`id_user`, `id_product`) VALUES 
@@ -150,3 +150,31 @@ INSERT INTO `Products_Favorites` (`id_user`, `id_product`) VALUES
 (5, 4),
 (5, 3),
 (6, 5);
+
+ALTER TABLE `Orders`
+	ADD KEY `id_user` (`id_user`),
+	ADD KEY `id_payment` (`id_payment`),
+	ADD KEY `id_status` (`id_status`);
+
+ALTER TABLE `Products_Orders`
+	ADD KEY `id_order` (`id_order`),
+	ADD KEY `id_product` (`id_product`);
+
+ALTER TABLE `Products_Favorites`
+	ADD KEY `id_user` (`id_user`),
+	ADD KEY `id_product` (`id_product`);
+
+ALTER TABLE `Orders`
+	ADD CONSTRAINT `Orders_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `Users` (`id_user`) ON DELETE CASCADE,
+	ADD CONSTRAINT `Orders_ibfk_2` FOREIGN KEY (`id_payment`) REFERENCES `Payment` (`id_payment`),
+	ADD CONSTRAINT `Orders_ibfk_3` FOREIGN KEY (`id_status`) REFERENCES `StatusCode` (`id_status`);
+
+ALTER TABLE `Products_Orders`
+	ADD CONSTRAINT `Products_Orders_ibfk_1` FOREIGN KEY (`id_order`) REFERENCES `Orders` (`id_order`) ON DELETE CASCADE,
+	ADD CONSTRAINT `Products_Orders_ibfk_2` FOREIGN KEY (`id_product`) REFERENCES `Products` (`id_product`);
+
+ALTER TABLE `Products_Favorites`
+	ADD CONSTRAINT `Products_Favorites_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `Users` (`id_user`) ON DELETE CASCADE,
+	ADD CONSTRAINT `Products_Favorites_ibfk_2` FOREIGN KEY (`id_product`) REFERENCES `Products` (`id_product`) ON DELETE CASCADE;
+COMMIT;
+
