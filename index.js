@@ -23,17 +23,3 @@ app.listen(app.get('port'), () => {
     console.log(`Server listen on port ${app.get('port')}. Waiting for db connection...`)
 })
 
-
-/*
-PENDIENTE: mejorar la dinamica de request de favs agregados ya en el get user con un join a la tabla favs.
- Quitar el req get favs by id.
- Modificar el modelo en swager tanto del post favs, como de los requests.
- Controlar el delete cascade en sql cuando se borra el producto.
-
- PENDIENTE:
- Cambiar el metodo put del cambio de estado por PATCH. y AGREGAR UN PUT COMPLETO DE LA ORDEN. Swagger. Mirar postman collection
-
- PENDIENTE: 
- Agregar id_user en el bodypostOrder swagger. Agregar ademas en el post de order el id de payment a que corresponde.
-
-*/
