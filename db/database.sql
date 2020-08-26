@@ -19,19 +19,19 @@ CREATE TABLE `Users` (
 );
 
 INSERT INTO `Users` (`full_name`, `email`, `telephone`, `username`, `password`, `address`, `admin`) VALUES
-("Admin", "admin@delilah.com", "3516664564", "admin", "adminpass", "Admin", 1);
+("Admin", "admin@delilah.com", "3516664564", "admin", "$2a$10$BYF4QeI9DWpcyYD3YtKU7Ou9DSjlthGuX3YhuSwQM.Ax0PvqE17qa", "Admin", 1);
 
 INSERT INTO `Users` (`full_name`, `email`, `telephone`, `username`, `password`, `address`) VALUES 
-("Juan Cruz Gonzalez", "juancruzgon@gmail.com", "3516458574", "juanshift", "mas12563", "Croacia 2345"),
-("Jhon F Kenedy", "kenedy@gmail.com", "1552365677", "kenedy", "kennedy965", "North Stratford 21"),
-("Michael Jackson", "kingofpop@gmail.com", "15656232455", "ayuwoki_michael", "moonwalk185", "Neverland Ranch 123"),
-("Freddie Mercury", "heehee@gmail.com", "2565565645", "heehee_freddie", "heehee12", "Bohemian Rhapsody 45"),
-("Ricardo Fort", "elcomandante@gmail.com", "1165568845", "el_comandante", "rollsroyce99", "Cutucuchillo 4526"),
-("Thomas Anderson", "thechosenone@gmail.com", "1176584665", "neo_matrix", "wakeup01011", "Matrix 1"),
-("Robert Downey Jr", "ironman@gmail.com", "1174545465", "iron_man", "iamironman01", "Avengers HQ 84"),
-("Elon Musk", "realironman@gmail.com", "1178896845", "elon_musk", "wakeuponmars1", "Tesla 1232"),
-("Dafne Suarez", "dafilinda@gmail.com", "3516894523", "dafitop", "jeje1234", "Glam 77"),
-("Ramiro Golmar", "rami@gmail.com", "3516547889", "ramikratos", "godofwar25", "Maza 338");
+("Juan Cruz Gonzalez", "juancruzgon@gmail.com", "3516458574", "juanshift", "$2a$10$NKlv0Z3sPFukYdFe/SgUvOm3wQwH0PlOVfJOEr.6h0CxvgnUpSEre", "Croacia 2345"),
+("Jhon F Kenedy", "kenedy@gmail.com", "1552365677", "kenedy", "$2a$10$HN.13IrkWU5KjMup6yhhPOCeLVLSuc3q.jxg1zxISaMhAHTbS2t5G", "North Stratford 21"),
+("Michael Jackson", "kingofpop@gmail.com", "15656232455", "ayuwoki_michael", "$2a$10$oyRI9K4er/2PDj.eQtnFEeMoMTqK67c41FziqJIXFf.uuYs8YAlb6", "Neverland Ranch 123"),
+("Freddie Mercury", "heehee@gmail.com", "2565565645", "heehee_freddie", "$2a$10$dlT/def.NrHdrP5h1CbVluh4aVBgTrl08Qjdvws.uDs1ugCP5WHB6", "Bohemian Rhapsody 45"),
+("Ricardo Fort", "elcomandante@gmail.com", "1165568845", "el_comandante", "$2a$10$SVeVumP.F3B.b7EQX.Sc3.UX1HHUT96urd8ACorAvMx4ETcqXU2Hm", "Cutucuchillo 4526"),
+("Thomas Anderson", "thechosenone@gmail.com", "1176584665", "neo_matrix", "$2a$10$9U9Uk9Y7S1YrdwXGGh5SUuafuW3ze2WIJSRedqHGbMVYAndDRNG32", "Matrix 1"),
+("Robert Downey Jr", "ironman@gmail.com", "1174545465", "iron_man", "$2a$10$42fhwFEJimknhiHX.HbvtOZHPBC2JKkO6aZCxuwrorlbG2wNp5sOe", "Avengers HQ 84"),
+("Elon Musk", "realironman@gmail.com", "1178896845", "elon_musk", "$2a$10$sULuYUhfrK5Zqg5jxo1lNuVVuEA/ZzxEhE5/PUO1VlIRG9x.EOHzW", "Tesla 1232"),
+("Dafne Suarez", "dafilinda@gmail.com", "3516894523", "dafitop", "$2a$10$.4nLhd7JU6pTI1qLWDniee7FGbOZxgdFJS3UlJVdJIj115R5eLTBG", "Glam 77"),
+("Ramiro Golmar", "rami@gmail.com", "3516547889", "ramikratos", "$2a$10$5nVmdydh5pJ7.FY3cx.fKe0Fsi..ioh4PcfWjMNFiuYfLCKSIzOO.", "Maza 338");
 
 
 DROP TABLE IF EXISTS `Products`;
