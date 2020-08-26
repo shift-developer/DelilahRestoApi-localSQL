@@ -51,12 +51,6 @@ paths:
                   msg:
                     type: string
                     example: User successfully created
-        "422":
-          description: Invalid input
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/errorSemanticUser"
         "409":
           description: Invalid email
           content:
@@ -70,7 +64,19 @@ paths:
                   error:
                     type: string
                     example: Email is already used
-        
+        "422":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: The body request have semantic errors
   /users/login:
     post:
       tags:
@@ -191,12 +197,6 @@ paths:
                 items:
                   $ref: "#/components/schemas/User"
 
-        "404":
-          description: Id not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/errorId"
         "401":
           description: "Validation exception - Ivalid token - No token"
           content:
@@ -256,12 +256,6 @@ paths:
                   msg:
                     type: string
                     example: User successfully updated
-        "422":
-          description: Invalid input
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/errorSemanticUser"            
         "401":
           description: "Validation exception - Invalid token - No token"
           content:
@@ -269,11 +263,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorToken'
         "404":
-          description: Id not found
+          description: "ID not found"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/errorId"
+                $ref: '#/components/schemas/errorId'
         "409":
           description: Invalid email
           content:
@@ -287,7 +281,19 @@ paths:
                   error:
                     type: string
                     example: Email is already used
-        
+        "422":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: The body request have semantic errors
     delete:
       tags:
         - "Users"
@@ -322,12 +328,37 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorToken'
         "404":
-          description: Id not found
+          description: "ID not found"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/errorId"
-        
+                $ref: '#/components/schemas/errorId'
+        "409":
+          description: Invalid email
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: Email is already used
+        "422":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: The body request have semantic errors
   /users/{id}/favs:
     post:
       tags:
@@ -370,12 +401,7 @@ paths:
                   message:
                     type: string
                     example: Favourite product added successfully 
-        "404":
-          description: Id not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/errorId"
+
         "401":
           description: "Validation exception - Ivalid token - No token"
           content:
@@ -424,14 +450,10 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: "#/components/schemas/UserFavouriteProducts"
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
 
-        "404":
-          description: Id not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/errorId"
         "401":
           description: "Validation exception - Ivalid token - No token"
           content:
@@ -502,13 +524,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorToken'
         "404":
-          description: Id not found
+          description: "ID not found"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/errorId"
+                $ref: '#/components/schemas/errorId'
     
-  /products:
+  /product:
     post:
       tags:
         - "Products"
@@ -544,14 +566,8 @@ paths:
                     example: Product created
                   product:
                     $ref: "#/components/schemas/ProductBodyPost"
-        "422":
-          description: Invalid input
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/errorSemanticProduct"
 
-        "409":
+        "422":
           description: Name is used
           content:
             application/json:
@@ -561,7 +577,7 @@ paths:
                   success:
                     type: boolean
                     example: false
-                  msg:
+                  error:
                     type: string
                     example: Name is used
         "401":
@@ -603,7 +619,7 @@ paths:
     
     
 
-  /products/{id}:
+  /product/{id}:
     get:
       tags:
         - "Products"
@@ -632,11 +648,11 @@ paths:
                 $ref: "#/components/schemas/Product"
 
         "404":
-            description: Id not found
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/errorId"
+          description: Invalid id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/errorId"
         "401":
           description: "Validation exception - Invalid token - No token"
           content:
@@ -681,23 +697,17 @@ paths:
                 $ref: "#/components/schemas/EditedProduct"
 
         "404":
-            description: Id not found
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/errorId"
+          description: Invalid id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/errorId"
         "401":
           description: "Validation exception - Invalid token - No token"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/errorToken'
-        "422":
-          description: Invalid input
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/errorSemanticProduct"
   
     delete:
       tags:
@@ -740,12 +750,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorToken'
 
-  /orders:
+  /order:
     post:
       tags:
         - "Orders"
       summary: Create a new order
-      description: Allows an user to create a new order. PAYMENT ID 1 - CASH. ID 2 - CREDITCARD. ID 3 DEBIT.
+      description: Allows an user to create a new order
 
       parameters:
         - name: access-token
@@ -782,7 +792,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/errorSemanticOrder"
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: The body request have semantic errors
     
     get:
       tags:
@@ -816,7 +833,7 @@ paths:
 
     
 
-  /orders/{id}:
+  /order/{id}:
     get:
         tags:
           - "Orders"
@@ -845,12 +862,6 @@ paths:
                 schema:
                   $ref: "#/components/schemas/Order"
   
-          "404":
-            description: Id not found
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/errorId"
           "401":
             description: "Validation exception - Invalid token - No token"
             content:
@@ -873,7 +884,7 @@ paths:
     put:
         tags:
           - "Orders"
-        summary: Edit an order by id (Admin exclusive)
+        summary: Edit an order status by id (Admin exclusive)
         description: Allows the admin to edit an order
   
         parameters:
@@ -912,57 +923,19 @@ paths:
               application/json:
                 schema:
                   $ref: '#/components/schemas/errorToken'
-          "404":
-            description: Id not found
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/errorId"
           "422":
-            description: Invalid input
+            description: Invalid id
             content:
               application/json:
                 schema:
-                  $ref: "#/components/schemas/errorSemanticOrder"
-    patch:
-      tags:
-        - "Orders"
-      summary: Update Order Status (Admin exclusive)
-      description: Update an existing order
-      parameters:
-        - name: id
-          in: path
-          description: The id of the order you want to delete
-          schema:
-            type: integer
-          required: true
-        - name: access-token
-          in: header
-          description: Admin token
-          schema:
-            $ref: "#/components/schemas/AuthorizationHeaders"
-          required: true
-      requestBody:
-          required: true
-          description: Order new status
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UpdateOrderStatus"
-      responses:
-        "200":
-          description: Order deleted
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UpdatedOrder" 
-        "404":
-          description: Id not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/errorId"
-          
+                  type: object
+                  properties:
+                    success:
+                      type: boolean
+                      example: false
+                    error:
+                      type: string
+                      example: Incorrect ID
     delete:
       tags:
         - "Orders"
@@ -999,15 +972,10 @@ paths:
                   success:
                     type: boolean
                     example: false
-                  msg:
+                  error:
                     type: string
                     example: Incorrect ID
-        "404":
-          description: Id not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/errorId"
+
 components:
   schemas:
     #ERRORS
@@ -1017,51 +985,18 @@ components:
         success:
           type: boolean
           example: false
-        msg:
+        message:
           type: string
-          example: "Invalid token, no token or not authorized to make this request"
+          example: "Invalid token or no token"
     errorId:
       type: object
       properties:
         success:
           type: boolean
           example: false
-        msg:
+        message:
           type: string
           example: "Id not found"
-    errorSemanticUser:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: false
-        msg:
-          type: string
-          example: "The body request have semantic errors"
-        schemaExample:
-          $ref: "#/components/schemas/UserBodypost"
-    errorSemanticProduct:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: false
-        msg:
-          type: string
-          example: "The body request have semantic errors"
-        schemaExample:
-          $ref: "#/components/schemas/ProductBodyPost"
-    errorSemanticOrder:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: false
-        msg:
-          type: string
-          example: "The body request have semantic errors"
-        schemaExample:
-          $ref: "#/components/schemas/OrderBodyPost"
     #HEADERS
     AuthorizationHeaders:
       type: "object"
@@ -1088,7 +1023,7 @@ components:
           example: kingofpop@michaeljackson.com
         phoneNumber:
           type: "string"
-          example: "12123244152"
+          example: 12123244152
         address:
           type: "string"
           example: Neverland Ranch, Santa Barbara California
@@ -1118,25 +1053,7 @@ components:
         address:
           type: "string"
           example: Neverland Ranch, Santa Barbara California
-        favorites:
-          type: array
-          items:
-            type: object
-            properties:
-              id_producto:
-                type: "integer"
-                format: "int64"
-                example: 3
-        orders:
-          type: array
-          items:
-            type: object
-            properties:
-              id_order:
-                type: "integer"
-                format: "int64"
-                example: 35
-        admin:
+        isAdmin:
           type: "boolean"
           example: false
     DeletedUser:
@@ -1180,16 +1097,11 @@ components:
           type: "integer"
           format: "int64"
           example: 3
-    UserFavouriteProducts:
-      type: "array"
-      items:
-        type: "object"
-        properties:
-          id_producto:
-            type: "integer"
-            format: "int64"
-            example: 4
-            
+        id_User:
+          type: "integer"
+          format: "int64"
+          example: 1
+
     Product:
       type: "object"
       properties:
@@ -1369,9 +1281,6 @@ components:
               quantity:
                 type: "integer"
                 example: 2
-        id_user:
-          type: integer
-          example: 2
         id_payment:
           type: integer
           example: 1
@@ -1432,21 +1341,7 @@ components:
             total_price:
               type: integer
               example: 600
-    UpdateOrderStatus:
-      type: object
-      properties:
-        id_status:
-          type: integer
-          example: 4
-    UpdatedOrder:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: true
-        message:
-          type: string
-          example: Order status updated
+
     DeletedOrder:
       type: object
       properties:
