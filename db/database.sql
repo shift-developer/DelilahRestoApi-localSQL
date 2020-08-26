@@ -22,12 +22,17 @@ INSERT INTO `Users` (`full_name`, `email`, `telephone`, `username`, `password`, 
 ("Admin", "admin@delilah.com", "3516664564", "admin", "adminpass", "Admin", 1);
 
 INSERT INTO `Users` (`full_name`, `email`, `telephone`, `username`, `password`, `address`) VALUES 
-("Juan Cruz Gonzalez", "juancruzgon@gmail.com", "3516458574", "juanshift", "mas12563", "croacio2345"),
+("Juan Cruz Gonzalez", "juancruzgon@gmail.com", "3516458574", "juanshift", "mas12563", "Croacia 2345"),
 ("Jhon F Kenedy", "kenedy@gmail.com", "1552365677", "kenedy", "sniper965", "North Stratford 21"),
 ("Michael Jackson", "kingofpop@gmail.com", "15656232455", "ayuwoki_michael", "moonwalk185", "Neverland Ranch 123"),
 ("Freddie Mercury", "heehee@gmail.com", "2565565645", "heehee_freddie", "heehee12", "Bohemian Rhapsody 45"),
 ("Ricardo Fort", "elcomandante@gmail.com", "1165568845", "el_comandante", "rollsroyce99", "Cutucuchillo 4526"),
-("Thomas Anderson", "thechosenone@gmail.com", "1178894565", "neo_matrix", "wakeup000", "Matrix 1");
+("Thomas Anderson", "thechosenone@gmail.com", "1176584665", "neo_matrix", "wakeup000", "Matrix 1"),
+("Robert Downey Jr", "ironman@gmail.com", "1174545465", "iron_man", "iamironman01", "Avengers HQ 84"),
+("Elon Musk", "realironman@gmail.com", "1178896845", "elon_musk", "wakeuponmars1", "Tesla 1232"),
+("Dafne Suarez", "dafilinda@gmail.com", "3516894523", "dafitop", "jeje1234", "Glam 77"),
+("Ramiro Golmar", "rami@gmail.com", "3516547889", "ramikratos", "godofwar25", "Maza 338");
+
 
 DROP TABLE IF EXISTS `Products`;
 CREATE TABLE `Products` (
@@ -64,7 +69,15 @@ CREATE TABLE `Orders` (
 );
 
 INSERT INTO `Orders` (`id_user`, `total_price`, `id_payment`, `date`, `description`, `address`, `id_status`) VALUES
-(3, "1000", 1, "2020/08/14 14:15:03", "2xGolHam", "North Stratford 21", "1");
+(2, "1400", 1, "2020/08/14 14:02:42", "1xCarHam 1xPepPiz 1xMonFri", "Croacia 2345", 5),
+(3, "1000", 2, "2020/08/14 14:05:03", "2xGolHam", "North Stratford 21", 4),
+(4, "800", 2, "2020/08/14 14:06:25", "1xCesSal 1xVegSand", "Neverland Ranch 123", 4),
+(5, "8400", 1, "2020/08/14 14:09:33", "10xPepPiz 5xSalBag", "Bohemian Rhapsody 45", 3),
+(6, "960", 3, "2020/08/14 14:18:48", "3xClaHam", "Cutucuchillo 4526", 3),
+(7, "720", 2, "2020/08/14 14:21:15", "1xMonFri 1xClaHam", "Matrix 1", 6),
+(8, "900", 1, "2020/08/14 14:25:02", "1xCarHam 1xVegSand", "Avengers HQ 84", 2),
+(9, "800", 2, "2020/08/14 14:29:54", "2xMonFri", "Tesla 1232", 2),
+(10, "2000", 2, "2020/08/14 14:31:49", "4xGolHam", "Glam 77", 1);
 
 DROP TABLE IF EXISTS `Status`;
 CREATE TABLE `Status` (
@@ -104,7 +117,21 @@ CREATE TABLE `Products_Orders` (
 );
 
 INSERT INTO `Products_Orders` (`id_order`, `id_product`, `quantity`) VALUES 
-(1, 3, 2);
+(1, 2, 1),
+(1, 4, 1),
+(1, 8, 1),
+(2, 3, 2),
+(3, 5, 1),
+(3, 6, 1),
+(4, 1, 5),
+(4, 4, 10),
+(5, 7, 3),
+(6, 8, 1),
+(6, 7, 1),
+(7, 2, 1),
+(7, 2, 1),
+(8, 8, 2),
+(9, 3, 4);
 
 DROP TABLE IF EXISTS `Products_Favorites`;
 CREATE TABLE `Products_Favorites` (
@@ -115,9 +142,11 @@ CREATE TABLE `Products_Favorites` (
 );
 
 INSERT INTO `Products_Favorites` (`id_user`, `id_product`) VALUES 
-(1, 3),
-(1, 2),
+(2, 2),
 (2, 4),
-(2, 1),
-(2, 3),
-(4, 5);
+(3, 4),
+(4, 1),
+(4, 8),
+(5, 4),
+(5, 3),
+(6, 5);
