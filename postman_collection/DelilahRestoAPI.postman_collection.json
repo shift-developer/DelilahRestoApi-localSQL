@@ -19,7 +19,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userName\": \"\",\r\n    \"password\": \"\",\r\n    \"fullName\": \"\",\r\n    \"email\": \"\",\r\n    \"phoneNumber\": \"\",\r\n    \"address\": \"\"\r\n}",
+							"raw": "{\r\n    \"username\": \"\",\r\n    \"password\": \"\",\r\n    \"full_name\": \"\",\r\n    \"email\": \"\",\r\n    \"telephone\": \"\",\r\n    \"address\": \"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -51,7 +51,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userName\": \"\",\r\n    \"password\": \"\"\r\n}",
+							"raw": "{\r\n    \"username\": \"\",\r\n    \"password\": \"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -90,7 +90,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"idProduct\": 3\r\n}",
+							"raw": "{\r\n    \"id_product\": 3\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -227,7 +227,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "insert token here",
+									"value": "",
 									"type": "string"
 								}
 							]
@@ -236,7 +236,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userName\": \"\",\r\n    \"password\": \"\",\r\n    \"fullName\": \"\",\r\n    \"email\": \"\",\r\n    \"phoneNumber\": \"\",\r\n    \"address\": \"\"\r\n}",
+							"raw": "{\r\n    \"username\": \"\",\r\n    \"password\": \"\",\r\n    \"full_name\": \"\",\r\n    \"email\": \"\",\r\n    \"telephone\": \"\",\r\n    \"address\": \"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -244,14 +244,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/users/2",
+							"raw": "localhost:3000/users/10",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"users",
-								"2"
+								"10"
 							]
 						},
 						"description": "Normal users can only access to their id, admins have global access."
@@ -274,13 +274,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/user/10",
+							"raw": "localhost:3000/users/10",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
-								"user",
+								"users",
 								"10"
 							]
 						},
