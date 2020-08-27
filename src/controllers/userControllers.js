@@ -154,26 +154,64 @@ const deleteUserById = (req, res) => {
             console.log(err);
             res.status(500).json({success: false, msg: 'Server internal error'});
         })
-
-    
-
 }
 
 const addFavProduct = (req, res) => {
 
+    const id = req.params.idUser;
+    const {id_product} = req.body;
 
+    db.query('INSERT INTO Products_Favorites (id_user, id_product) VALUES (?, ?)',
+        {
+            type: Sequelize.QueryTypes.INSERT,
+            replacements: [id, id_product]
+        })
+        .then( result => {
+            res.status(200).json({success: true, msg: 'Favourite product added successfully'});
+        })
+        .catch( err => {
+            console.log(err);
+            res.status(500).json({success: false, msg: 'Server internal error'})
+        });
 
 }
 
 const getFavProduct = (req, res) => {
 
-    
+    const id = req.params.idUser;
+
+    db.query('SELECT id_product FROM Products_Favorites WHERE id_user = ?',
+        {
+            type: Sequelize.QueryTypes.SELECT,
+            replacements: [id]
+        })
+        .then(result => {
+            res.json(result);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({success: false, msg: 'Server internal error'})
+        })
 
 }
 
 const deleteFavProduct = (req, res) => {
 
+    const {idUser, idProduct} = req.params;
     
+    db.query('DELETE FROM Products_Favorites WHERE id_user = ? AND id_product = ?',
+        {
+            type: Sequelize.QueryTypes.DELETE,
+            replacements: [idUser, idProduct]
+        })
+        .then(result => {
+            res.json({success: true, msg: "Favourite product deleted"})
+        })
+        .catch( err => {
+            console.log(err);
+            res.status(500).json({success: false, msg: 'Server internal error'})
+        })
+
 
 }
 
