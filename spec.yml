@@ -87,7 +87,7 @@ paths:
             schema:
               type: object
               properties:
-                userName:
+                username:
                   type: string
                   example: ayuwoki_michael
                 password:
@@ -105,9 +105,12 @@ paths:
                   success:
                     type: boolean
                     example: true
-                  userName:
+                  username:
                     type: string
                     example: ayuwoki_michael
+                  id_user:
+                    type: integer
+                    example: 4
                   accesstoken:
                     type: string
                     example: "eyJhbGciOiJIUzI1jshhsInR5cCI6IkpXVCJ9.eyJpZCI6MTAwLCJpc0FkbWluIjoxLCJpYXQiOjE1OT00TY4NTIsImV4cCI6MTU5NjU1NTg1Mn0.o9r6q2IXlOmzJVhTNoAasdsmyhfLFnp2ckw7GVxAuLA"
@@ -367,7 +370,7 @@ paths:
                   success:
                     type: boolean
                     example: true
-                  message:
+                  msg:
                     type: string
                     example: Favourite product added successfully 
         "404":
@@ -448,7 +451,7 @@ paths:
                   success:
                     type: boolean
                     example: false
-                  error:
+                  msg:
                     type: string
                     example: Incorrect ID
   
@@ -492,7 +495,7 @@ paths:
                   success:
                     type: boolean
                     example: true
-                  message:
+                  msg:
                     type: string
                     example: Favourite product deleted
         "401":
@@ -1074,19 +1077,19 @@ components:
     UserBodypost:
       type: "object"
       properties:
-        userName:
+        username:
           type: "string"
           example: ayuwoki_michael
         password:
           type: "string"
           example: thriller123
-        fullName:
+        full_name:
           type: "string"
           example: Michael Jackson
         email:
           type: "string"
           example: kingofpop@michaeljackson.com
-        phoneNumber:
+        telephone:
           type: "string"
           example: "12123244152"
         address:
@@ -1096,49 +1099,31 @@ components:
     User:
       type: "object"
       properties:
-        id:
+        id_user:
           type: "integer"
           format: "int64"
           example: 1
-        userName:
+        username:
           type: "string"
           example: ayuwoki_michael
         password:
           type: "string"
           example: thriller123
-        fullName:
+        full_name:
           type: "string"
           example: Michael Jackson
         email:
           type: "string"
           example: kingofpop@michaeljackson.com
-        phoneNumber:
+        telephone:
           type: "string"
           example: 12123244152
         address:
           type: "string"
           example: Neverland Ranch, Santa Barbara California
-        favorites:
-          type: array
-          items:
-            type: object
-            properties:
-              id_producto:
-                type: "integer"
-                format: "int64"
-                example: 3
-        orders:
-          type: array
-          items:
-            type: object
-            properties:
-              id_order:
-                type: "integer"
-                format: "int64"
-                example: 35
         admin:
-          type: "boolean"
-          example: false
+          type: integer
+          example: 0
     DeletedUser:
       type: object
       properties:
@@ -1176,7 +1161,7 @@ components:
     UserFavouriteProductPost:
       type: "object"
       properties:
-        id_Product: 
+        id_product: 
           type: "integer"
           format: "int64"
           example: 3
@@ -1185,7 +1170,7 @@ components:
       items:
         type: "object"
         properties:
-          id_producto:
+          id_product:
             type: "integer"
             format: "int64"
             example: 4
@@ -1379,16 +1364,6 @@ components:
           type: string
           example: "Av 9 de julio 3312, CABA"
 
-    EditOrder:
-      type: object
-      properties:
-        id:
-          type: "integer"
-          format: "int64"
-          example: 5
-        state:
-          type: string
-          example: cooking
     EditedOrder:
       type: object
       properties:
