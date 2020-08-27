@@ -8,8 +8,8 @@ const generateToken = (info) => {
 
 const isValidToken = (token) => {
     try {
-        const isValid = jwt.verify(token, signature);
-        return isValid;
+        const user = jwt.verify(token, signature);
+        return user;
     } catch(e) {
         return false;
     }

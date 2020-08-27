@@ -8,10 +8,14 @@ const {
     deleteProductById
 } = require('../controllers/productControllers');
 
-router.post('/', addNewProduct);
-router.get('/', getAllProducts);
-router.get('/:id', getProductById);
-router.put('/:id', editProductById);
-router.delete('/:id', deleteProductById);
+const {
+    validateToken
+} = require('../middlewares/middlewares');
+
+router.post('/', [validateToken], addNewProduct);
+router.get('/', [validateToken], getAllProducts);
+router.get('/:idProduct', [validateToken], getProductById);
+router.put('/:idProduct', [validateToken], editProductById);
+router.delete('/:idProduct', [validateToken], deleteProductById);
 
 module.exports = router;

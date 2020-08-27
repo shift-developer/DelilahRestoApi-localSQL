@@ -2,16 +2,17 @@ const {db, Sequelize } = require('../../db/database');
 const bcrypt = require('bcryptjs');
 const { generateToken } = require('../middlewares/jwt');
 
+
 const registerUser = (req, res) => {
 
-    const { userName, fullName, email, phoneNumber, address} = req.body;
+    const { username, full_name, email, telephone, address} = req.body;
 
     const password = bcrypt.hashSync(req.body.password, 10);
 
     db.query('INSERT INTO Users (full_name, email, telephone, username, password, address) VALUES (?, ? ,? ,?, ?, ?)',
         {
             type: Sequelize.QueryTypes.INSERT,
-            replacements: [fullName, email, phoneNumber, userName, password, address]
+            replacements: [full_name, email, telephone, username, password, address]
         })
         .then( result => {
             res.status(201).json({success: true, msg: 'User successfully created'});
@@ -43,7 +44,8 @@ const loginUser = (req, res) => {
                     const token = generateToken({id_user: id_user, isAdmin: admin});
                     res.json({
                         success: true,
-                        userName: userName,
+                        username: userName,
+                        id_user: id_user,
                         accessToken: token
                     });
                 } else {
@@ -77,19 +79,83 @@ const getAllUsers = (req, res) => {
 
 const getUserById = (req, res) => {
 
-
-
+    const id = req.params.idUser;
+    db.query('SELECT * FROM Users WHERE id_user = ?',
+        {
+            type: Sequelize.QueryTypes.SELECT,
+            replacements: [id]
+        })
+        .then( result => {
+            if (result.length !== 0) {
+                res.json(result)
+            } else {
+                res.status(404).json({success: false, msg: "Id not found"});
+            }
+        })
 }
 
 const editUserById = (req, res) => {
 
+    const id = req.params.idUser;
+    const { username, full_name, email, telephone, address } = req.body;
+    const password = bcrypt.hashSync(req.body.password, 10);
 
+    db.query('UPDATE Users SET full_name = ?, email = ?, telephone = ?, username = ?, password = ?, address = ? WHERE id_user = ?',
+        {
+            type: Sequelize.QueryTypes.UPDATE,
+            replacements: [full_name, email, telephone, username, password, address, id]
+        })
+        .then(result => {
+            res.json({success: true, msg: "User successfully updated"});
+        })
+        .catch( err => {
+            console.log(err);
+            res.status(500).json({success: false, msg: 'Server internal error'});
+        });
 
 }
 
 const deleteUserById = (req, res) => {
 
+    const id = req.params.idUser;
 
+    db.query('SELECT * FROM Users WHERE id_user = ?',
+        {
+            type: Sequelize.QueryTypes.SELECT,
+            replacements: [id]
+        })
+        .then( result => {
+            if (result.length === 0) {
+                res.status(404).json({success: false, msg: "Id not found"});
+            } else return result;
+        })
+        .then( result => {
+            let user = result[0];
+
+            db.query('DELETE FROM Users WHERE id_user = ?',
+                {
+                    type: Sequelize.QueryTypes.DELETE,
+                    replacements: [id]
+                })
+                .then(result => {
+                    res.json({
+                        success: true,
+                        message: "User deleted",
+                        deletedUser: user
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                    res.status(500).json({success: false, msg: 'Server internal error'});
+                });
+            
+        })
+        .catch( err => {
+            console.log(err);
+            res.status(500).json({success: false, msg: 'Server internal error'});
+        })
+
+    
 
 }
 

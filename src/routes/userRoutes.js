@@ -12,16 +12,18 @@ const {
     deleteFavProduct
 } = require('../controllers/userControllers');
 
-//import of middlewares
+const {
+    validateToken
+} = require('../middlewares/middlewares');
 
 router.post('/register', registerUser);
 router.post('/login', loginUser);
-router.get('/', getAllUsers);
-router.get('/:id', getUserById);
-router.put('/:id', editUserById);
-router.delete('/:id', deleteUserById);
-router.post('/:id/favs', addFavProduct);
-router.get('/:id/favs', getFavProduct);
-router.delete('/:id/favs/:idProduct', deleteFavProduct);
+router.get('/', [validateToken], getAllUsers);
+router.get('/:idUser', [validateToken], getUserById);
+router.put('/:idUser', [validateToken], editUserById);
+router.delete('/:idUser', [validateToken], deleteUserById);
+router.post('/:idUser/favs', [validateToken], addFavProduct);
+router.get('/:idUser/favs', [validateToken], getFavProduct);
+router.delete('/:idUser/favs/:idProduct', [validateToken], deleteFavProduct);
 
 module.exports = router;

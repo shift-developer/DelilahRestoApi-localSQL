@@ -9,11 +9,15 @@ const {
     deleteOrderById
 } = require('../controllers/orderControllers')
 
-router.post('/', addNewOrder);
-router.get('/', getAllOrders);
-router.get('/:id', getOrderById);
-router.put('/:id', editOrderById);
-router.patch('/:id', updateOrderStatus);
-router.delete('/:id', deleteOrderById);
+const {
+    validateToken
+} = require('../middlewares/middlewares');
+
+router.post('/', [validateToken], addNewOrder);
+router.get('/', [validateToken], getAllOrders);
+router.get('/:idOrder', [validateToken], getOrderById);
+router.put('/:idOrder', [validateToken], editOrderById);
+router.patch('/:idOrder', [validateToken], updateOrderStatus);
+router.delete('/:idOrder', [validateToken], deleteOrderById);
 
 module.exports = router;
