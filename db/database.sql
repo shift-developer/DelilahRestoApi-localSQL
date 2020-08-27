@@ -172,7 +172,7 @@ ALTER TABLE `Orders`
 
 ALTER TABLE `Products_Orders`
 	ADD CONSTRAINT `Products_Orders_ibfk_1` FOREIGN KEY (`id_order`) REFERENCES `Orders` (`id_order`) ON DELETE CASCADE,
-	ADD CONSTRAINT `Products_Orders_ibfk_2` FOREIGN KEY (`id_product`) REFERENCES `Products` (`id_product`);
+	ADD CONSTRAINT `Products_Orders_ibfk_2` FOREIGN KEY (`id_product`) REFERENCES `Products` (`id_product`) ON DELETE CASCADE;
 
 ALTER TABLE `Products_Favorites`
 	ADD CONSTRAINT `Products_Favorites_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `Users` (`id_user`) ON DELETE CASCADE,

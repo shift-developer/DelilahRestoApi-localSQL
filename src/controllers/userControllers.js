@@ -26,12 +26,12 @@ const registerUser = (req, res) => {
 
 const loginUser = (req, res) => {
 
-    const { userName, password } = req.body;
+    const { username, password } = req.body;
 
     db.query('SELECT * FROM Users WHERE username = ?',
         {
             type: Sequelize.QueryTypes.SELECT,
-            replacements: [userName]
+            replacements: [username]
         })
         .then( result => {
             const user = result[0];
@@ -44,7 +44,7 @@ const loginUser = (req, res) => {
                     const token = generateToken({id_user: id_user, isAdmin: admin});
                     res.json({
                         success: true,
-                        username: userName,
+                        username: username,
                         id_user: id_user,
                         accessToken: token
                     });
@@ -79,11 +79,11 @@ const getAllUsers = (req, res) => {
 
 const getUserById = (req, res) => {
 
-    const id = req.params.idUser;
+    const {idUser} = req.params;
     db.query('SELECT * FROM Users WHERE id_user = ?',
         {
             type: Sequelize.QueryTypes.SELECT,
-            replacements: [id]
+            replacements: [idUser]
         })
         .then( result => {
             if (result.length !== 0) {
@@ -96,14 +96,14 @@ const getUserById = (req, res) => {
 
 const editUserById = (req, res) => {
 
-    const id = req.params.idUser;
+    const {idUser} = req.params;
     const { username, full_name, email, telephone, address } = req.body;
     const password = bcrypt.hashSync(req.body.password, 10);
 
     db.query('UPDATE Users SET full_name = ?, email = ?, telephone = ?, username = ?, password = ?, address = ? WHERE id_user = ?',
         {
             type: Sequelize.QueryTypes.UPDATE,
-            replacements: [full_name, email, telephone, username, password, address, id]
+            replacements: [full_name, email, telephone, username, password, address, idUser]
         })
         .then(result => {
             res.json({success: true, msg: "User successfully updated"});
@@ -117,12 +117,12 @@ const editUserById = (req, res) => {
 
 const deleteUserById = (req, res) => {
 
-    const id = req.params.idUser;
+    const {idUser} = req.params;
 
     db.query('SELECT * FROM Users WHERE id_user = ?',
         {
             type: Sequelize.QueryTypes.SELECT,
-            replacements: [id]
+            replacements: [idUser]
         })
         .then( result => {
             if (result.length === 0) {
@@ -135,7 +135,7 @@ const deleteUserById = (req, res) => {
             db.query('DELETE FROM Users WHERE id_user = ?',
                 {
                     type: Sequelize.QueryTypes.DELETE,
-                    replacements: [id]
+                    replacements: [idUser]
                 })
                 .then(result => {
                     res.json({
@@ -158,13 +158,13 @@ const deleteUserById = (req, res) => {
 
 const addFavProduct = (req, res) => {
 
-    const id = req.params.idUser;
+    const {idUser} = req.params;
     const {id_product} = req.body;
 
     db.query('INSERT INTO Products_Favorites (id_user, id_product) VALUES (?, ?)',
         {
             type: Sequelize.QueryTypes.INSERT,
-            replacements: [id, id_product]
+            replacements: [idUser, id_product]
         })
         .then( result => {
             res.status(200).json({success: true, msg: 'Favourite product added successfully'});
@@ -178,12 +178,12 @@ const addFavProduct = (req, res) => {
 
 const getFavProduct = (req, res) => {
 
-    const id = req.params.idUser;
+    const {idUser} = req.params;
 
     db.query('SELECT id_product FROM Products_Favorites WHERE id_user = ?',
         {
             type: Sequelize.QueryTypes.SELECT,
-            replacements: [id]
+            replacements: [idUser]
         })
         .then(result => {
             res.json(result);
@@ -211,7 +211,6 @@ const deleteFavProduct = (req, res) => {
             console.log(err);
             res.status(500).json({success: false, msg: 'Server internal error'})
         })
-
 
 }
 
