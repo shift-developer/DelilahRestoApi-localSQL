@@ -23,21 +23,6 @@ const registerUser = (req, res) => {
 
 }
 
-const getAllUsers = (req, res) => {
-
-    db.query('SELECT * FROM Users',
-        {
-            type: Sequelize.QueryTypes.SELECT
-        })
-        .then( users => {
-            res.json(users);
-        })
-        .catch( err => {
-            console.log(err);
-            res.status(500).json({success: false, msg: 'Server internal error'})
-        })
-}
-
 const loginUser = (req, res) => {
 
     const { userName, password } = req.body;
@@ -75,8 +60,66 @@ const loginUser = (req, res) => {
         });
 }
 
+const getAllUsers = (req, res) => {
+
+    db.query('SELECT * FROM Users',
+        {
+            type: Sequelize.QueryTypes.SELECT
+        })
+        .then( users => {
+            res.json(users);
+        })
+        .catch( err => {
+            console.log(err);
+            res.status(500).json({success: false, msg: 'Server internal error'})
+        })
+}
+
+const getUserById = (req, res) => {
+
+
+
+}
+
+const editUserById = (req, res) => {
+
+
+
+}
+
+const deleteUserById = (req, res) => {
+
+
+
+}
+
+const addFavProduct = (req, res) => {
+
+
+
+}
+
+const getFavProduct = (req, res) => {
+
+    
+
+}
+
+const deleteFavProduct = (req, res) => {
+
+    
+
+}
+
+
 module.exports = {
     registerUser,
+    loginUser,
     getAllUsers,
-    loginUser
+    getUserById,
+    editUserById,
+    deleteUserById,
+    addFavProduct,
+    getFavProduct,
+    deleteFavProduct
 }
