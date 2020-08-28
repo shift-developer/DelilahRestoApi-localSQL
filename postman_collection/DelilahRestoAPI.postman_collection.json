@@ -19,7 +19,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"\",\r\n    \"password\": \"\",\r\n    \"full_name\": \"\",\r\n    \"email\": \"\",\r\n    \"telephone\": \"\",\r\n    \"address\": \"\"\r\n}",
+							"raw": "{\r\n    \"username\": \"JhonWick\",\r\n    \"password\": \"babayaga1\",\r\n    \"full_name\": \"Jhon Wick\",\r\n    \"email\": \"jhonwick@gmail.com\",\r\n    \"telephone\": \"1235456578\",\r\n    \"address\": \"Everywhere 101\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -440,7 +440,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Classic Double Hamburguer\",\r\n    \"price\": 400,\r\n    \"description\": \"Double Hamburguer\",\r\n    \"url_image\": \"https://i.pinimg.com/236x/08/eb/e2/08ebe20cb7072f53d432cd49aeb80b45.jpg\",\r\n    \"code\": \"ClaDobHam\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Classic Double Hamburguer\",\r\n    \"price\": 500,\r\n    \"description\": \"Double Hamburguer\",\r\n    \"url_image\": \"https://i.pinimg.com/236x/08/eb/e2/08ebe20cb7072f53d432cd49aeb80b45.jpg\",\r\n    \"code\": \"ClaDobHam\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -592,45 +592,6 @@
 							]
 						},
 						"description": "Get specific order. Normal users can only access to their id, admins have global access."
-					},
-					"response": []
-				},
-				{
-					"name": "Edit order by ID (ADMIN exclusive)",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "insert token here",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"products\": \r\n    [\r\n        {\r\n            \"id_product\": 3,\r\n            \"quantity\": 2\r\n        },\r\n        {\r\n            \"id_product\": 8,\r\n            \"quantity\": 1\r\n        }\r\n    ],\r\n    \"id_user\": 2,\r\n    \"id_payment\": 1,\r\n    \"address\": \"Croacia 2919\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:3000/orders/2",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"orders",
-								"2"
-							]
-						},
-						"description": "Edit order"
 					},
 					"response": []
 				},
