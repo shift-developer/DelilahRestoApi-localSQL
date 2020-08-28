@@ -17,7 +17,7 @@ app.set('port', process.env.PORT || 3000);
 
 app.use('/users', userRoutes);
 app.use('/products', productRoutes);
-//app.use('/orders', orderRoutes);
+app.use('/orders', orderRoutes);
 
 app.listen(app.get('port'), () => {
     console.log(`Server listen on port ${app.get('port')}. Waiting for db connection...`)
