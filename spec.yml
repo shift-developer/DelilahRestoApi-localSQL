@@ -532,7 +532,7 @@ paths:
               $ref: "#/components/schemas/ProductBodyPost"
 
       responses:
-        "200":
+        "201":
           description: Product created
           content:
             application/json:
@@ -542,7 +542,7 @@ paths:
                   success:
                     type: boolean
                     example: true
-                  message:
+                  msg:
                     type: string
                     example: Product created
                   product:
@@ -766,14 +766,22 @@ paths:
               $ref: "#/components/schemas/OrderBodyPost"
 
       responses:
-        "200":
+        "201":
           description: OK
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Order"
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Order created
+                  order:
+                    $ref: "#/components/schemas/Order"
+                  
         "401":
           description: "Validation exception - Ivalid token - No token"
           content:
@@ -873,60 +881,7 @@ paths:
                     error:
                       type: string
                       example: Incorrect ID
-    put:
-        tags:
-          - "Orders"
-        summary: Edit an order by id (Admin exclusive)
-        description: Allows the admin to edit an order
   
-        parameters:
-          - name: id
-            in: path
-            description: The id of the order you want to edit
-            schema:
-              type: integer
-            required: true
-          - name: access-token
-            in: header
-            description: Admin token
-            schema:
-              $ref: "#/components/schemas/AuthorizationHeaders"
-            required: true
-  
-        requestBody:
-          required: true
-          description: Order new status
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/OrderBodyPost"
-  
-        responses:
-          "200":
-            description: OK
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/EditedOrder"
-  
-          "401":
-            description: "Validation exception - Invalid token - No token"
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/errorToken'
-          "404":
-            description: Id not found
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/errorId"
-          "422":
-            description: Invalid input
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/errorSemanticOrder"
     patch:
       tags:
         - "Orders"
@@ -954,7 +909,7 @@ paths:
                 $ref: "#/components/schemas/UpdateOrderStatus"
       responses:
         "200":
-          description: Order deleted
+          description: Order updated
           content:
             application/json:
               schema:
@@ -1186,8 +1141,7 @@ components:
           type: string
           example: Hamburguesa clásica
         price:
-          type: "integer"
-          format: "int64"
+          type: number
           example: 300
         description:
           type: "string"
@@ -1225,8 +1179,7 @@ components:
           type: string
           example: Hamburguesa con queso
         price:
-          type: "integer"
-          format: "int64"
+          type: "number"
           example: 200
         description:
           type: "string"
@@ -1258,8 +1211,7 @@ components:
               type: string
               example: Hamburguesa con queso
             price:
-              type: "integer"
-              format: "int64"
+              type: number
               example: 200
             description:
               type: "string"
@@ -1308,7 +1260,7 @@ components:
     Order:
       type: object
       properties:
-        id:
+        id_order:
           type: "integer"
           format: "int64"
           example: 5
@@ -1316,28 +1268,36 @@ components:
           type: "integer"
           format: "int64"
           example: 43
-        payment_method:
-          type: "string"
-          example: efectivo
+        id_payment:
+          type: integer
+          example: 1
         status:
           type: "string"
           example: new
         date:
           type: "string"
           description: date
-          example: "14/08/2020"
-        time:
-          type: "string"
-          description: time
-          example: "22:54:06"
+          example: "14/08/2020 22:54:06"
         description:
           type: "string"
           example: "2xHamQue"
         address:
           type: "string"
           example: "Av 9 de julio 3312, CABA"
+        products:
+          type: "array"
+          items:
+            type: object
+            properties:
+              id_product:
+                type: "integer"
+                example: 3
+              quantity:
+                type: "integer"
+                example: 2
+            
         total_price:
-          type: integer
+          type: number
           example: 600
 
     OrderBodyPost:
@@ -1363,50 +1323,6 @@ components:
         address:
           type: string
           example: "Av 9 de julio 3312, CABA"
-
-    EditedOrder:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: true
-        message:
-          type: string
-          example: Order updated
-        editedOrder:
-          type: object
-          properties:
-            id:
-              type: "integer"
-              format: "int64"
-              example: 5
-            id_user:
-              type: "integer"
-              format: "int64"
-              example: 43
-            payment_method:
-              type: "string"
-              example: efectivo
-            status:
-              type: "string"
-              example: cooking
-            date:
-              type: "string"
-              description: date
-              example: "14/08/2020"
-            time:
-              type: "string"
-              description: time
-              example: "22:54:06"
-            description:
-              type: "string"
-              example: "2xHamQue"
-            address:
-              type: "string"
-              example: "Av 9 de julio 3312, CABA"
-            total_price:
-              type: integer
-              example: 600
     UpdateOrderStatus:
       type: object
       properties:
@@ -1419,7 +1335,7 @@ components:
         success:
           type: boolean
           example: true
-        message:
+        msg:
           type: string
           example: Order status updated
     DeletedOrder:
@@ -1428,13 +1344,13 @@ components:
         success:
           type: boolean
           example: true
-        message:
+        msg:
           type: string
           example: Order deleted
         deletedOrder:
           type: object
           properties:
-            id:
+            id_order:
               type: "integer"
               format: "int64"
               example: 5
@@ -1442,3 +1358,21 @@ components:
               type: "integer"
               format: "int64"
               example: 43
+            total_price:
+              type: string
+              example: 1400
+            id_payment:
+              type: integer
+              example: 1
+            date:
+              type: string
+              example: "2020-08-28T17:44:17.000Z"
+            description:
+              type: string
+              example: "2xGolHam 1xMonFri"
+            address:
+              type: string
+              example: "Street 123"
+            id_status:
+              type: integer
+              example: 1
