@@ -98,31 +98,101 @@ const addNewOrder = (req, res) => {
 
 const getAllOrders = (req, res) => {
 
-    
+    db.query('SELECT * FROM Orders',
+        {
+            type: Sequelize.QueryTypes.SELECT
+        })
+        .then( orders => {
+            res.json(orders);
+        })
+        .catch( err => {
+            console.log(err);
+            res.status(500).json({success: false, msg: 'Server internal error'})
+        })
 
 }
 
 const getOrderById = (req, res) => {
 
-    
-
-}
-
-const editOrderById = (req, res) => {
-
-    
+    const {idOrder} = req.params;
+    db.query('SELECT * FROM Orders WHERE id_order = ?',
+        {
+            type: Sequelize.QueryTypes.SELECT,
+            replacements: [idOrder]
+        })
+        .then( result => {
+            if (result.length !== 0) {
+                res.json(result)
+            } else {
+                res.status(404).json({success: false, msg: "Id not found"});
+            }
+        })
+        .catch( err => {
+            console.log(err);
+            res.status(500).json({success: false, msg: 'Server internal error'})
+        });
 
 }
 
 const updateOrderStatus = (req, res) => {
 
+    const {idOrder} = req.params;
+    const { id_status } = req.body;
 
+    db.query('UPDATE Orders SET id_status = ? WHERE id_order = ?',
+        {
+            type: Sequelize.QueryTypes.UPDATE,
+            replacements: [id_status, idOrder]
+        })
+        .then( result => {
+            res.json({success: true, msg: "Order status updated"});
+        })
+        .catch( err => {
+            console.log(err);
+            res.status(500).json({success: false, msg: 'Server internal error'})
+        });
 
 }
 
 const deleteOrderById = (req, res) => {
 
-    
+    const {idOrder} = req.params;
+
+    db.query('SELECT * FROM Orders WHERE id_order = ?',
+        {
+            type: Sequelize.QueryTypes.SELECT,
+            replacements: [idOrder]
+        })
+        .then( result => {
+            if (result.length === 0) {
+                res.status(404).json({success: false, msg: "Id not found"});
+            } else return result;
+        })
+        .then( result => {
+            let order = result[0];
+
+            db.query('DELETE FROM Orders WHERE id_order = ?',
+                {
+                    type: Sequelize.QueryTypes.DELETE,
+                    replacements: [idOrder]
+                })
+                .then(result => {
+                    res.json({
+                        success: true,
+                        msg: "Order deleted",
+                        deletedOrder: order
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                    res.status(500).json({success: false, msg: 'Server internal error'});
+                });
+            
+        })
+        .catch( err => {
+            console.log(err);
+            res.status(500).json({success: false, msg: 'Server internal error'});
+        })
 
 }
 
@@ -130,7 +200,6 @@ module.exports = {
     addNewOrder,
     getAllOrders,
     getOrderById,
-    editOrderById,
     updateOrderStatus,
     deleteOrderById
 }
