@@ -114,7 +114,7 @@ const getAllOrders = (req, res) => {
 
 const getOrderById = (req, res) => {
 
-    const {idOrder} = req.params;
+    const {idOrder, productOrders} = req.params;
     db.query('SELECT * FROM Orders WHERE id_order = ?',
         {
             type: Sequelize.QueryTypes.SELECT,
@@ -122,7 +122,8 @@ const getOrderById = (req, res) => {
         })
         .then( result => {
             if (result.length !== 0) {
-                res.json(result)
+                result[0].products = productOrders;
+                res.json(result);
             } else {
                 res.status(404).json({success: false, msg: "Id not found"});
             }
