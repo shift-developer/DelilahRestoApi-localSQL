@@ -115,17 +115,23 @@ const getAllOrders = (req, res) => {
 const getOrderById = (req, res) => {
 
     const {idOrder, productOrders} = req.params;
+    const {id_user, isAdmin} = req.params.user;
+
     db.query('SELECT * FROM Orders WHERE id_order = ?',
         {
             type: Sequelize.QueryTypes.SELECT,
             replacements: [idOrder]
         })
         .then( result => {
-            if (result.length !== 0) {
-                result[0].products = productOrders;
-                res.json(result);
-            } else {
-                res.status(404).json({success: false, msg: "Id not found"});
+            const idUser = result[0].id_user;
+
+            if (isAdmin || idUser == id_user) {
+                if (result.length !== 0) {
+                    result[0].products = productOrders;
+                    res.json(result);
+                } else {
+                    res.status(404).json({success: false, msg: "Id not found"});
+                }
             }
         })
         .catch( err => {

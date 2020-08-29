@@ -21,7 +21,7 @@ const {
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.get('/', [validateToken, validateAdmin], getAllUsers);
-router.get('/:idUser', [validateToken, AllUsersId], getUserById);
+router.get('/:idUser', [validateToken], getUserById);
 router.put('/:idUser', [validateToken, AllUsersId], editUserById);
 router.delete('/:idUser', [validateToken, validateAdmin], deleteUserById);
 router.post('/:idUser/favs', [validateToken, AllUsersId], addFavProduct);
