@@ -15,17 +15,21 @@ const {
 const {
     validateToken,
     validateAdmin,
-    AllUsersId
+    allUsersId,
+    loginBody,
+    userBody,
+    userFavBody,
+    emailOrUsernameExists
 } = require('../middlewares/middlewares');
 
-router.post('/register', registerUser);
-router.post('/login', loginUser);
+router.post('/register', [userBody, emailOrUsernameExists], registerUser);
+router.post('/login', [loginBody], loginUser);
 router.get('/', [validateToken, validateAdmin], getAllUsers);
-router.get('/:idUser', [validateToken], getUserById);
-router.put('/:idUser', [validateToken, AllUsersId], editUserById);
+router.get('/:idUser', [validateToken, allUsersId], getUserById);
+router.put('/:idUser', [validateToken, allUsersId, userBody], editUserById);
 router.delete('/:idUser', [validateToken, validateAdmin], deleteUserById);
-router.post('/:idUser/favs', [validateToken, AllUsersId], addFavProduct);
-router.get('/:idUser/favs', [validateToken, AllUsersId], getFavProduct);
-router.delete('/:idUser/favs/:idProduct', [validateToken, AllUsersId], deleteFavProduct);
+router.post('/:idUser/favs', [validateToken, userFavBody, allUsersId], addFavProduct);
+router.get('/:idUser/favs', [validateToken, allUsersId], getFavProduct);
+router.delete('/:idUser/favs/:idProduct', [validateToken, allUsersId], deleteFavProduct);
 
 module.exports = router;

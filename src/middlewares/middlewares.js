@@ -38,13 +38,12 @@ const validateAdmin = (req, res, next) => {
     }
 }
 
-const AllUsersId = (req, res, next) => {
+const allUsersId = (req, res, next) => {
     const {idUser} = req.params;
     const {id_user, isAdmin} = req.params.user;
 
-    if (isAdmin || idUser == id_user) {
-        next();
-    } else {
+    if (isAdmin || idUser == id_user) next();
+    else {
         res.status(401).json({
             success: false,
             msg: "Invalid token, no token or not authorized to make this request"
@@ -52,7 +51,8 @@ const AllUsersId = (req, res, next) => {
     }
 }
 
-const AllOrdersId = (req, res, next) => {
+
+const allOrdersId = (req, res, next) => {
     const {idOrder} = req.params;
     const {id_user, isAdmin} = req.params.user;
 
@@ -62,7 +62,14 @@ const AllOrdersId = (req, res, next) => {
             replacements: [idOrder]
         })
         .then( result => {
-            const {id_user} = result[0];
+            const idUser = result[0].id_user;
+            if(isAdmin || id_user == idUser) next();
+            else {
+                res.status(401).json({
+                    success: false,
+                    msg: "Invalid token, no token or not authorized to make this request"
+                });
+            }
         })
 }
 
@@ -122,6 +129,28 @@ const userBody = (req, res, next) => {
     }
 }
 
+const emailOrUsernameExists = (req, res, next) => {
+    const { username, email } = req.body;
+    
+    db.query('SELECT username, email FROM Users WHERE username = ? OR email = ?',
+    {
+        type: Sequelize.QueryTypes.SELECT,
+        replacements: [username, email]
+    })
+    .then( users =>{
+        if(users.find(user => user.email == email).length) {
+            res.status(409).json({success: false, error: "Email is already used"});
+        }
+
+        else if(users.find(user => user.username == username).length) {
+            res.status(409).json({success: false, error: "Username is already used"});
+        }
+
+        else next();
+    });
+
+}
+
 const userFavBody = (req, res, next) => {
     const { id_product } = req.body;
 
@@ -137,14 +166,79 @@ const userFavBody = (req, res, next) => {
     }
 }
 
+const userFavExists = (req, res, next) => {
+    const { id_product } = req.body;
+    const {idUser} = req.params;
+    
+    db.query('SELECT id_product FROM Products_Favorites WHERE id_user = ?',
+    {
+        type: Sequelize.QueryTypes.SELECT,
+        replacements: [idUser]
+    })
+    
 
+}
 
+const productBody = (req, res , next) => {
 
+    const {name, price, description, url_image, code} = req.body;
+
+    if (name && price && description && url_image && code) next();
+    else {
+        res.status(422).json({
+            success: false,
+            msg: "The body request have semantic errors",
+            schemaExample: {
+                name: "Fried Chicken Wings",
+                price: 600,
+                description: "5 delicious fried chicken wings",
+                url_image: "url",
+                code: "FriChi"
+            }
+        })
+    }
+}
+
+const orderBody = (req, res, next) => {
+
+    const { id_user, id_payment, address, products } = req.body;
+
+    if (id_user && id_payment && address && products) next();
+    else {
+        res.status(422).json({
+            success: false,
+            msg: "The body request have semantic errors",
+            schemaExample: {
+                products: 
+                [
+                    {
+                        id_product: 3,
+                        quantity: 2
+                    },
+                    {
+                        id_product: 8,
+                        quantity: 1
+                    }
+                ],
+                id_user: 2,
+                id_payment: 1,
+                address: "Croacia 2919"
+            }
+        })
+    }
+
+}
 
 module.exports = {
     validateToken,
     validateAdmin,
-    AllUsersId,
-    AllOrdersId,
+    allUsersId,
+    allOrdersId,
+    loginBody,
+    userBody,
+    userFavBody,
+    productBody,
+    orderBody,
+    emailOrUsernameExists,
     getProductsOrders
 }
