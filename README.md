@@ -1,6 +1,4 @@
-# DelilahRestoApi-localSQL
-
-<h1 align="center">Delilah API</h1>
+<h1 align="center">DelilahRestoApi-localSQL</h1>
 
 ## 📝 Table of Contents
 
@@ -12,7 +10,7 @@
 - [Built Using](#built_using)
 - [Authors](#authors)
 
-## 🧐 About <a name = "about"></a>
+##  About <a name = "about"></a>
 
 The third project of Full Stack Developer Acamica's Certificate. This API handles restaurant orders, you can signup to place orders and save your favourite products. Administrators can post, update or delete meals, and change the order status.
 
@@ -44,7 +42,7 @@ npm i express body-parser bcryptjs jsonwebtoken moment mysql2 sequelize
 
 ```
 
-End with an example of getting some data out of the system or using it for a little demo.
+Now, you have to start sql server on XAMPP and create a new session on HeidiSQL called "delilah_resto_localdb". Run on them the sql file for database creation: `./db/database.sql`.
 
 
 ## 🎈 Usage <a name="usage"></a>
@@ -66,7 +64,12 @@ In order to test all the requests available of the app, there's a **Postman** Co
 🔐 If you need to have admin permissions (like Products administration) use this sample data:
 ```
 username: admin
-password: admindpass
+password: adminpass
+```
+User for tests:
+```
+username: ayuwoki_michael
+password: moonwalk185
 ```
 
 ## ⛏️ Built Using <a name = "built_using"></a>
