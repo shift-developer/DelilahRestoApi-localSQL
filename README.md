@@ -1,4 +1,4 @@
-<h1 align="center">DelilahRestoApi-localSQL</h1>
+<h1>DelilahRestoApi-localSQL</h1>
 
 ## 📝 Table of Contents
 
