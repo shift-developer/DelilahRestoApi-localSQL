@@ -10,7 +10,7 @@ const { db } = require('./db/database');
 
 db.authenticate()
     .then( () => console.log(`Connection to SQL data base has been established successfully.`))
-    .catch((error) => console.error(`Unable to connect to local db:`, error));
+    .catch((error) => console.error(`Unable to connect to local db: `, error));
 
 app.use(bodyParser.json());
 app.set('port', process.env.PORT || 3000);

@@ -3,7 +3,8 @@ const moment = require('moment');
 
 const addNewOrder = (req, res) => {
 
-    const { id_user, id_payment, address, products } = req.body;
+    const {  id_payment, address, products } = req.body;
+    const {id_user} = req.params.user;
     
     const DATE = moment(new Date());
     const dateSQL = DATE.format('YYYY-MM-DD HH:mm:ss');
@@ -115,7 +116,6 @@ const getAllOrders = (req, res) => {
 const getOrderById = (req, res) => {
 
     const {idOrder, productOrders} = req.params;
-    const {id_user, isAdmin} = req.params.user;
 
     db.query('SELECT * FROM Orders WHERE id_order = ?',
         {
@@ -123,16 +123,14 @@ const getOrderById = (req, res) => {
             replacements: [idOrder]
         })
         .then( result => {
-            const idUser = result[0].id_user;
-
-            if (isAdmin || idUser == id_user) {
-                if (result.length !== 0) {
-                    result[0].products = productOrders;
-                    res.json(result);
-                } else {
-                    res.status(404).json({success: false, msg: "Id not found"});
-                }
+  
+            if (result.length !== 0) {
+                result[0].products = productOrders;
+                res.json(result);
+            } else {
+                res.status(404).json({success: false, msg: "Id not found"});
             }
+            
         })
         .catch( err => {
             console.log(err);
@@ -163,43 +161,25 @@ const updateOrderStatus = (req, res) => {
 
 const deleteOrderById = (req, res) => {
 
-    const {idOrder} = req.params;
+    const {idOrder, order} = req.params;
 
-    db.query('SELECT * FROM Orders WHERE id_order = ?',
+    db.query('DELETE FROM Orders WHERE id_order = ?',
         {
-            type: Sequelize.QueryTypes.SELECT,
+            type: Sequelize.QueryTypes.DELETE,
             replacements: [idOrder]
         })
-        .then( result => {
-            if (result.length === 0) {
-                res.status(404).json({success: false, msg: "Id not found"});
-            } else return result;
+        .then(result => {
+            res.json({
+                success: true,
+                msg: "Order deleted",
+                deletedOrder: order
+            });
         })
-        .then( result => {
-            let order = result[0];
-
-            db.query('DELETE FROM Orders WHERE id_order = ?',
-                {
-                    type: Sequelize.QueryTypes.DELETE,
-                    replacements: [idOrder]
-                })
-                .then(result => {
-                    res.json({
-                        success: true,
-                        msg: "Order deleted",
-                        deletedOrder: order
-                    });
-                })
-                .catch(err => {
-                    console.log(err);
-                    res.status(500).json({success: false, msg: 'Server internal error'});
-                });
-            
-        })
-        .catch( err => {
+        .catch(err => {
             console.log(err);
             res.status(500).json({success: false, msg: 'Server internal error'});
-        })
+        });
+            
 
 }
 

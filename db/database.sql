@@ -16,7 +16,8 @@ CREATE TABLE `Users` (
 	`address` VARCHAR(150) NOT NULL,
 	`admin` INT(1) NULL DEFAULT 0,
 	PRIMARY KEY (`id_user`),
-	UNIQUE (`email`)
+	UNIQUE (`email`),
+	UNIQUE (`username`)
 );
 
 INSERT INTO `Users` (`full_name`, `email`, `telephone`, `username`, `password`, `address`, `admin`) VALUES

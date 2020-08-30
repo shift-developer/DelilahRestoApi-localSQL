@@ -11,13 +11,15 @@ const {
 const {
     validateToken,
     validateAdmin,
-    productBody
+    productBody,
+    nameOrCodeExists,
+    productId
 } = require('../middlewares/middlewares');
 
-router.post('/', [validateToken, validateAdmin, productBody], addNewProduct);
+router.post('/', [validateToken, validateAdmin, productBody, nameOrCodeExists], addNewProduct);
 router.get('/', [validateToken], getAllProducts);
-router.get('/:idProduct', [validateToken], getProductById);
-router.put('/:idProduct', [validateToken, validateAdmin, productBody], editProductById);
-router.delete('/:idProduct', [validateToken, validateAdmin], deleteProductById);
+router.get('/:idProduct', [validateToken, productId], getProductById);
+router.put('/:idProduct', [validateToken, validateAdmin, productBody, productId], editProductById);
+router.delete('/:idProduct', [validateToken, validateAdmin, productId], deleteProductById);
 
 module.exports = router;

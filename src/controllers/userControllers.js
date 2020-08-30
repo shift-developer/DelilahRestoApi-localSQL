@@ -79,7 +79,8 @@ const getAllUsers = (req, res) => {
 
 const getUserById = (req, res) => {
 
-    const {idUser} = req.params;
+    const {idUser, orders} = req.params;
+
     db.query('SELECT * FROM Users WHERE id_user = ?',
         {
             type: Sequelize.QueryTypes.SELECT,
@@ -87,6 +88,7 @@ const getUserById = (req, res) => {
         })
         .then( result => {
             if (result.length !== 0) {
+                result[0].orders = orders;
                 res.json(result)
             } else {
                 res.status(404).json({success: false, msg: "Id not found"});
@@ -110,7 +112,7 @@ const editUserById = (req, res) => {
         })
         .catch( err => {
             console.log(err);
-            res.status(500).json({success: false, msg: 'Server internal error'});
+            res.status(500).json({success: false, msg: err.errors[0].message});
         });
 
 }

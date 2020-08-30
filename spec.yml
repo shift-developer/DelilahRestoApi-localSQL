@@ -192,7 +192,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/User"
+                  $ref: "#/components/schemas/UserById"
 
         "404":
           description: Id not found
@@ -816,7 +816,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Order"
+                  $ref: "#/components/schemas/AllOrders"
 
         "401":
           description: "Validation exception - Invalid token - No token"
@@ -886,7 +886,14 @@ paths:
       tags:
         - "Orders"
       summary: Update Order Status (Admin exclusive)
-      description: Update an existing order
+      description: Update an existing order. 
+        id 1 - new .  
+        id 2 - confirmed . 
+        id 3 - cooking .
+        id 4 - sending .
+        id 5 - delivered .
+        id 6 - canceled .
+
       parameters:
         - name: id
           in: path
@@ -1079,6 +1086,44 @@ components:
         admin:
           type: integer
           example: 0
+        
+    UserById:
+      type: "object"
+      properties:
+        id_user:
+          type: "integer"
+          format: "int64"
+          example: 1
+        username:
+          type: "string"
+          example: ayuwoki_michael
+        password:
+          type: "string"
+          example: thriller123
+        full_name:
+          type: "string"
+          example: Michael Jackson
+        email:
+          type: "string"
+          example: kingofpop@michaeljackson.com
+        telephone:
+          type: "string"
+          example: 12123244152
+        address:
+          type: "string"
+          example: Neverland Ranch, Santa Barbara California
+        admin:
+          type: integer
+          example: 0
+        orders:
+          type: array
+          items:
+            type: object
+            properties:
+              id_order:
+                type: integer
+                example: 12
+            
     DeletedUser:
       type: object
       properties:
@@ -1255,8 +1300,37 @@ components:
             code:
               type: "string"
               example: EnsRus
-
-
+    AllOrders:
+      type: object
+      properties:
+        id_order:
+          type: "integer"
+          format: "int64"
+          example: 5
+        id_user:
+          type: "integer"
+          format: "int64"
+          example: 43
+        total_price:
+          type: number
+          example: 600
+        id_payment:
+          type: integer
+          example: 1
+        date:
+          type: "string"
+          description: date
+          example: "14/08/2020 22:54:06"
+        description:
+          type: "string"
+          example: "2xHamQue"
+        address:
+          type: "string"
+          example: "Av 9 de julio 3312, CABA"
+        id_status:
+          type: "integer"
+          example: 1
+        
     Order:
       type: object
       properties:
@@ -1271,9 +1345,9 @@ components:
         id_payment:
           type: integer
           example: 1
-        status:
-          type: "string"
-          example: new
+        id_status:
+          type: "integer"
+          example: 1
         date:
           type: "string"
           description: date
@@ -1314,9 +1388,6 @@ components:
               quantity:
                 type: "integer"
                 example: 2
-        id_user:
-          type: integer
-          example: 2
         id_payment:
           type: integer
           example: 1

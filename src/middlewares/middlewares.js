@@ -62,35 +62,24 @@ const allOrdersId = (req, res, next) => {
             replacements: [idOrder]
         })
         .then( result => {
-            const idUser = result[0].id_user;
-            if(isAdmin || id_user == idUser) next();
-            else {
-                res.status(401).json({
-                    success: false,
-                    msg: "Invalid token, no token or not authorized to make this request"
-                });
+            if(result.length != 0) {
+                const idUser = result[0].id_user;
+                if(isAdmin || id_user == idUser) next();
+                else {
+                    res.status(401).json({
+                        success: false,
+                        msg: "Invalid token, no token or not authorized to make this request"
+                    });
+                }
+            } else {
+                res.status(404).json({success: false, error: "Id not found"});
             }
-        })
-}
-
-const getProductsOrders = (req, res, next) => {
-
-    const {idOrder} = req.params;
-
-    db.query('SELECT id_product, quantity FROM Products_Orders WHERE id_order = ?',
-        {
-            type: Sequelize.QueryTypes.SELECT,
-            replacements: [idOrder]
-        })
-        .then( productOrders =>{
-            req.params.productOrders = productOrders;
-            next();
+            
         })
         .catch( err => {
             console.log(err);
-            res.status(500).json({success: false, msg: 'Server internal error'})
+            res.status(500).json({success: false, msg: 'Server internal error'});
         });
-
 }
 
 const loginBody = (req, res, next) => {
@@ -138,17 +127,49 @@ const emailOrUsernameExists = (req, res, next) => {
         replacements: [username, email]
     })
     .then( users =>{
-        if(users.find(user => user.email == email).length) {
-            res.status(409).json({success: false, error: "Email is already used"});
-        }
 
-        else if(users.find(user => user.username == username).length) {
-            res.status(409).json({success: false, error: "Username is already used"});
+        if(users.length != 0) {
+            if(users.find(user => user.email == email)) {
+                res.status(409).json({success: false, error: "Email is already used"});
+            }
+            else if(users.find(user => user.username == username)) {
+                res.status(409).json({success: false, error: "Username is already used"});
+            }
         }
 
         else next();
+    })
+    .catch( err => {
+        console.log(err);
+        res.status(500).json({success: false, msg: 'Server internal error'})
     });
 
+}
+
+const userId = (req, res, next) => {
+    const {idUser} = req.params;
+
+    db.query('SELECT id_user FROM Users WHERE id_user = ?',
+    {
+        type: Sequelize.QueryTypes.SELECT,
+        replacements: [idUser]
+    })
+    .then( user =>{
+        if( user.length != 0) {
+            const {id_user} = user[0];
+            if (id_user) next();
+            else{
+                res.status(404).json({success: false, error: "Id not found"});
+            }
+        } else {
+            res.status(404).json({success: false, error: "Id not found"});
+        }
+        
+    })
+    .catch( err => {
+        console.log(err);
+        res.status(500).json({success: false, msg: 'Server internal error'})
+    });
 }
 
 const userFavBody = (req, res, next) => {
@@ -175,7 +196,15 @@ const userFavExists = (req, res, next) => {
         type: Sequelize.QueryTypes.SELECT,
         replacements: [idUser]
     })
-    
+    .then( favs => {
+        if (favs.find((fav) => fav.id_product == id_product)) {
+            res.status(409).json({success: false, error: "Favorite product is already added"})
+        } else next();
+    })
+    .catch( err => {
+        console.log(err);
+        res.status(500).json({success: false, msg: 'Server internal error'})
+    });
 
 }
 
@@ -199,34 +228,186 @@ const productBody = (req, res , next) => {
     }
 }
 
+const nameOrCodeExists = (req, res, next) => {
+    const {name, code} = req.body;
+    
+    db.query('SELECT name, code FROM Products WHERE name = ? OR code = ?',
+    {
+        type: Sequelize.QueryTypes.SELECT,
+        replacements: [name, code]
+    })
+    .then( products =>{
+
+        if(products.length != 0) {
+            if(products.find(product => product.name == name)) {
+                res.status(409).json({success: false, error: "Name is already used"});
+            }
+    
+            else if(products.find(product => product.code == code)) {
+                res.status(409).json({success: false, error: "Code is already used"});
+            }
+    
+        }
+        
+        else next();
+    })
+    .catch( err => {
+        console.log(err);
+        res.status(500).json({success: false, msg: 'Server internal error'})
+    });
+
+}
+
+const productId = (req, res, next) => {
+    const {idProduct} = req.params;
+
+    db.query('SELECT * FROM Products WHERE id_product = ?',
+    {
+        type: Sequelize.QueryTypes.SELECT,
+        replacements: [idProduct]
+    })
+    .then( product =>{
+        if (product.length !== 0) {
+            req.params.product = product;
+            next();
+        }
+        else{
+            res.status(404).json({success: false, error: "Id not found"});
+        }
+    })
+    .catch( err => {
+        console.log(err);
+        res.status(500).json({success: false, msg: 'Server internal error'})
+    });
+}
+
+const orderId = (req, res, next) => {
+    const {idOrder} = req.params;
+
+    db.query('SELECT * FROM Orders WHERE id_order = ?',
+    {
+        type: Sequelize.QueryTypes.SELECT,
+        replacements: [idOrder]
+    })
+    .then( order =>{
+        if (order.length !== 0) {
+            req.params.order = order;
+            next();
+        }
+        else{
+            res.status(404).json({success: false, error: "Id not found"});
+        }
+    })
+    .catch( err => {
+        console.log(err);
+        res.status(500).json({success: false, msg: 'Server internal error'})
+    });
+}
+
 const orderBody = (req, res, next) => {
 
-    const { id_user, id_payment, address, products } = req.body;
+    const { id_payment, address, products } = req.body;
+    
 
-    if (id_user && id_payment && address && products) next();
+    if ( id_payment && address && products) next();
+    else {
+    res.status(422).json({
+        success: false,
+        msg: "The body request have semantic errors",
+        schemaExample: {
+            products: 
+            [
+                {
+                    id_product: 3,
+                    quantity: 2
+                },
+                {
+                    id_product: 8,
+                    quantity: 1
+                }
+            ],
+            id_user: 2,
+            id_payment: 1,
+            address: "Croacia 2919"
+        }
+        })
+    }
+    
+}
+
+const orderStatusBody = (req, res, next) => {
+
+    const { id_status } = req.body;
+
+    if ( id_status ) next();
     else {
         res.status(422).json({
             success: false,
             msg: "The body request have semantic errors",
             schemaExample: {
-                products: 
-                [
-                    {
-                        id_product: 3,
-                        quantity: 2
-                    },
-                    {
-                        id_product: 8,
-                        quantity: 1
-                    }
-                ],
-                id_user: 2,
-                id_payment: 1,
-                address: "Croacia 2919"
+                id_status: 2
             }
         })
     }
 
+}
+
+const orderStatusIdExists = (req, res, next) => {
+
+    const { id_status } = req.body;
+
+    db.query('SELECT id_status FROM statuscode WHERE id_status = ?',
+        {
+            type: Sequelize.QueryTypes.SELECT,
+            replacements: [id_status]
+        })
+        .then( result => {
+            const {id_status} = result[0];
+
+            if(id_status) next();
+            else {
+                res.status(422).json({success: false, error: "id_status not valid"})
+            }
+        })
+
+}
+
+const getProductsOrders = (req, res, next) => {
+
+    const {idOrder} = req.params;
+
+    db.query('SELECT id_product, quantity FROM Products_Orders WHERE id_order = ?',
+        {
+            type: Sequelize.QueryTypes.SELECT,
+            replacements: [idOrder]
+        })
+        .then( productOrders =>{
+            req.params.productOrders = productOrders;
+            next();
+        })
+        .catch( err => {
+            console.log(err);
+            res.status(500).json({success: false, msg: 'Server internal error'})
+        });
+
+}
+
+const getOrders = (req, res, next) => {
+    const {idUser} = req.params;
+
+    db.query('SELECT id_order FROM Orders WHERE id_user = ?',
+        {
+            type: Sequelize.QueryTypes.SELECT,
+            replacements: [idUser]
+        })
+        .then( orders =>{
+            req.params.orders = orders;
+            next();
+        })
+        .catch( err => {
+            console.log(err);
+            res.status(500).json({success: false, msg: 'Server internal error'})
+        });
 }
 
 module.exports = {
@@ -239,6 +420,14 @@ module.exports = {
     userFavBody,
     productBody,
     orderBody,
+    orderStatusBody,
     emailOrUsernameExists,
-    getProductsOrders
+    userFavExists,
+    nameOrCodeExists,
+    userId,
+    productId,
+    orderId,
+    orderStatusIdExists,
+    getProductsOrders,
+    getOrders
 }

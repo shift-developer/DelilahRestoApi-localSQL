@@ -88,6 +88,7 @@ const editProductById = (req, res) => {
 const deleteProductById = (req, res) => {
 
     const { idProduct } = req.params;
+    const deletedProduct = req.params.product;
 
     db.query('DELETE FROM Products WHERE id_product = ?',
     {
@@ -98,7 +99,7 @@ const deleteProductById = (req, res) => {
         res.json({
             success: true,
             message: "Product deleted",
-            deletedProduct: "agregar midleware"
+            deletedProduct: deletedProduct
         });
     })
     .catch(err => {

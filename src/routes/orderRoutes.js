@@ -11,16 +11,18 @@ const {
 const {
     validateToken,
     validateAdmin,
-    allUsersId,
     allOrdersId,
     orderBody,
+    orderStatusBody,
+    orderId,
+    orderStatusIdExists,
     getProductsOrders
 } = require('../middlewares/middlewares');
 
-router.post('/', [validateToken, validateAdmin, allUsersId, orderBody], addNewOrder);
+router.post('/', [validateToken, orderBody], addNewOrder);
 router.get('/', [validateToken, validateAdmin], getAllOrders);
-router.get('/:idOrder', [validateToken, getProductsOrders, allOrdersId], getOrderById);
-router.patch('/:idOrder', [validateToken, validateAdmin], updateOrderStatus);
-router.delete('/:idOrder', [validateToken, validateAdmin], deleteOrderById);
+router.get('/:idOrder', [validateToken, getProductsOrders, allOrdersId, orderId], getOrderById);
+router.patch('/:idOrder', [validateToken, validateAdmin, orderId, orderStatusBody, orderStatusIdExists], updateOrderStatus);
+router.delete('/:idOrder', [validateToken, validateAdmin, orderId], deleteOrderById);
 
 module.exports = router;

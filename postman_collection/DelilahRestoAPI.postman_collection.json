@@ -515,7 +515,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"products\": \r\n    [\r\n        {\r\n            \"id_product\": 3,\r\n            \"quantity\": 2\r\n        },\r\n        {\r\n            \"id_product\": 8,\r\n            \"quantity\": 1\r\n        }\r\n    ],\r\n    \"id_user\": 2,\r\n    \"id_payment\": 1,\r\n    \"address\": \"Croacia 2919\"\r\n}",
+							"raw": "{\r\n    \"products\": \r\n    [\r\n        {\r\n            \"id_product\": 3,\r\n            \"quantity\": 2\r\n        },\r\n        {\r\n            \"id_product\": 8,\r\n            \"quantity\": 1\r\n        }\r\n    ],\r\n    \"id_payment\": 1,\r\n    \"address\": \"Croacia 2919\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
