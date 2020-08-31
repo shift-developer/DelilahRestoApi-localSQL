@@ -23,8 +23,7 @@ These instructions will get you a copy of the project up and running on your loc
 You need to have:
 - [NodeJS](https://nodejs.org/) installed.
 - [XAMPP](https://www.apachefriends.org/es/index.html) installed.
-- [HeidiSQL](https://www.heidisql.com/download.php) installed, or another sql program to handle the host of MySQL local database.
-- [MySQLWorkbench](https://dev.mysql.com/downloads/workbench/) optional if you have macOS.
+- [HeidiSQL](https://www.heidisql.com/download.php) installed for Windows users or [MySQLWorkbench](https://dev.mysql.com/downloads/workbench/) for macOS users to handle the host of MySQL local database.
 
 ### Installing
 
