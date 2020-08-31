@@ -44,6 +44,15 @@ npm i express body-parser bcryptjs jsonwebtoken moment mysql2 sequelize
 
 Now, you have to start sql server on XAMPP and create a new session on HeidiSQL or MySQL Workbench called "delilah_resto_localdb". Run on them the sql file for database creation: `./db/database.sql`.
 
+```
+    database: 'delilah_resto_localdb',
+    username: 'root',
+    password: null,
+    dialect: 'mysql',
+    port: 3306,
+    host: localhost
+    
+```
 
 ## 🎈 Usage <a name="usage"></a>
 
