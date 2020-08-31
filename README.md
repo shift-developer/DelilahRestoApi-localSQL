@@ -24,6 +24,7 @@ You need to have:
 - [NodeJS](https://nodejs.org/) installed.
 - [XAMPP](https://www.apachefriends.org/es/index.html) installed.
 - [HeidiSQL](https://www.heidisql.com/download.php) installed, or another sql program to handle the host of MySQL local database.
+- [MySQLWorkbench](https://dev.mysql.com/downloads/workbench/) optional if you have macOS.
 
 ### Installing
 
@@ -42,7 +43,7 @@ npm i express body-parser bcryptjs jsonwebtoken moment mysql2 sequelize
 
 ```
 
-Now, you have to start sql server on XAMPP and create a new session on HeidiSQL called "delilah_resto_localdb". Run on them the sql file for database creation: `./db/database.sql`.
+Now, you have to start sql server on XAMPP and create a new session on HeidiSQL or MySQL Workbench called "delilah_resto_localdb". Run on them the sql file for database creation: `./db/database.sql`.
 
 
 ## 🎈 Usage <a name="usage"></a>
